@@ -50,6 +50,7 @@ namespace Server
                 StatusLabelCallback?.Invoke("Client request file list.");
                 // Send the list of files available on the server
                 string fileList = GetFileList();
+                StatusLabelCallback?.Invoke(fileList);
                 await writer.WriteLineAsync(fileList);
                 StatusLabelCallback?.Invoke("File list sent.");
             }
@@ -96,8 +97,9 @@ namespace Server
              // {
              //     Console.WriteLine($"Block {i}: {blockHashes[i]}");
              // }
-
+             StatusLabelCallback?.Invoke(files[i]);
              listOfDictionaries.Add(blockHashes);
+             
             //files[i] = blockHashes;
         }
 

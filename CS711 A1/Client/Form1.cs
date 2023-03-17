@@ -37,19 +37,20 @@ namespace Client
                     label1.Text = "Sent Request!";
                     // Read the file list from the cache server
                     string fileList = await reader.ReadLineAsync();
-                    List<Dictionary<string, Tuple<int, int, int, string>>> deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, Tuple<int, int, int, string>>>>(fileList);
-                    //string[] files = fileList.Split(';');
-                    label1.Text = "Reply received!";
-                    // Update the ListBox with the list of files
-                    listBoxFiles.Items.Clear();
-                    foreach (var dictionary in deserializedListOfDictionaries)
-                    {
-                        foreach (var entry in dictionary)
-                        {
-                            listBoxFiles.Items.Add(entry.Key);
-                            Console.WriteLine($"Key: {entry.Key}, StartByte: {entry.Value.Item1}, EndByte: {entry.Value.Item2}, BlockIndex: {entry.Value.Item3}, Hash: {entry.Value.Item4}");
-                        }
-                    }
+                    label1.Text = fileList;
+                    // List<Dictionary<string, Tuple<int, int, int, string>>> deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, Tuple<int, int, int, string>>>>(fileList);
+                    // //string[] files = fileList.Split(';');
+                    // label1.Text = "Reply received!";
+                    // // Update the ListBox with the list of files
+                    // listBoxFiles.Items.Clear();
+                    // foreach (var dictionary in deserializedListOfDictionaries)
+                    // {
+                    //     foreach (var entry in dictionary)
+                    //     {
+                    //         listBoxFiles.Items.Add(entry.Key);
+                    //         Console.WriteLine($"Key: {entry.Key}, StartByte: {entry.Value.Item1}, EndByte: {entry.Value.Item2}, BlockIndex: {entry.Value.Item3}, Hash: {entry.Value.Item4}");
+                    //     }
+                    // }
                     
                 }
             }
