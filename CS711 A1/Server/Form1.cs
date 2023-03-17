@@ -91,6 +91,7 @@ namespace Server
                 {
                     File.Copy(sourceFilePath, destinationFilePath, true);
                     StatusLabel.Text = $@"File added: {Path.GetFileName(sourceFilePath)}";
+                    LoadFileList();
                 }
             }
         }
