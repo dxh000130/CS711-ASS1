@@ -19,6 +19,7 @@ namespace Server
         
     }
     public Action<string> OutputCallback { get; set; }
+    public Action<string> StatusLabelCallback { get; set; }
     public async Task StartAsync()
     {
         OutputCallback?.Invoke("Starting listening: " + IPAddress.Parse(SERVER_HOST) + ":" + SERVER_PORT);
@@ -29,22 +30,26 @@ namespace Server
         {
             TcpClient client = await _listener.AcceptTcpClientAsync();
             _ = ProcessRequestAsync(client);
-
+            OutputCallback?.Invoke("Connected: " + IPAddress.Parse(SERVER_HOST) + ":" + SERVER_PORT);
         }
     }
 
     private async Task ProcessRequestAsync(TcpClient client)
     {
+
         using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
         using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
         {
+            StatusLabelCallback?.Invoke(client.ToString());
             string request = await reader.ReadLineAsync();
-
+            StatusLabelCallback?.Invoke(request);
             if (request.StartsWith("LIST_FILES"))
             {
+                StatusLabelCallback?.Invoke("Client request file list.");
                 // Send the list of files available on the server
                 string fileList = GetFileList();
                 await writer.WriteLineAsync(fileList);
+                StatusLabelCallback?.Invoke("File list sent.");
             }
             else if (request.StartsWith("GET_FILE_FRAGMENT"))
             {
@@ -67,7 +72,7 @@ namespace Server
     private string GetFileList()
     {
         
-        string serverFilesDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "File_Storage");
+        string serverFilesDirectory = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "File_Storage"));
 
         // If the directory does not exist, create it
         if (!Directory.Exists(serverFilesDirectory))

@@ -22,6 +22,7 @@ namespace Server
             server = new Server();
             LoadFileList();
             server.OutputCallback = UpdateIPLable;
+            server.StatusLabelCallback = UpdateStatusLable;
             string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             StorageFilePathLabel.Text = Path.GetFullPath(Path.Combine(currentDirectory, "..", "..", ".."));
             IPLable.Text = "Stop listening: " + IPAddress.Parse(Server.SERVER_HOST) + ":" + Server.SERVER_PORT.ToString();
@@ -49,6 +50,16 @@ namespace Server
             }
 
             IPLable.Text = text;
+        }
+        private void UpdateStatusLable(string text)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(UpdateStatusLable), text);
+                return;
+            }
+
+            StatusLabel.Text = text;
         }
         private async void startButton_Click(object sender, EventArgs e)
         {
