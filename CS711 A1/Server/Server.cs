@@ -12,7 +12,7 @@ namespace Server
 {
     public class Server
 {
-    public const int SERVER_PORT = 8083;
+    public const int SERVER_PORT = 8081;
     public const string SERVER_HOST = "127.0.0.1";
     private readonly TcpListener _listener;
 
@@ -88,16 +88,17 @@ namespace Server
         string[] files = Directory.GetFiles(serverFilesDirectory);
         int blockSize = 2048; // 2KB
         // Get the file names without the full path
-        List<Dictionary<string, Tuple<int, int, int, string>>> listOfDictionaries = new List<Dictionary<string, Tuple<int, int, int, string>>>();
+        List<Dictionary<string, List<Tuple<int, int, int, string>>>> listOfDictionaries = new List<Dictionary<string, List<Tuple<int, int, int, string>>>>();
         for (int i = 0; i < files.Length; i++)
         {
+            StatusLabelCallback?.Invoke(files[i]);
             var blockHashes = GetFileBlockHashes(files[i], blockSize);
 
              // for (int j = 0; j < blockHashes.Count; j++)
              // {
              //     Console.WriteLine($"Block {i}: {blockHashes[i]}");
              // }
-             StatusLabelCallback?.Invoke(files[i]);
+             
              listOfDictionaries.Add(blockHashes);
              
             //files[i] = blockHashes;
@@ -108,9 +109,9 @@ namespace Server
         //string fileList = string.Join(";", files);
         return jsonString;
     }
-    private static Dictionary<string, Tuple<int, int, int, string>> GetFileBlockHashes(string filePath, int blockSize)
+    private Dictionary<string, List<Tuple<int, int, int, string>>> GetFileBlockHashes(string filePath, int blockSize)
     {
-        var blockHashes = new Dictionary<string, Tuple<int, int, int, string>>();
+        var blockHashes = new Dictionary<string, List<Tuple<int, int, int, string>>>();
 
         using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
         {
@@ -118,28 +119,72 @@ namespace Server
             int bytesRead;
             int blockIndex = 0;
             int startByte = 0;
-
-            while ((bytesRead = fileStream.Read(buffer, 0, blockSize)) > 0)
+            int count = 0;
+            bytesRead = fileStream.Read(buffer, 0, blockSize);
+            while (bytesRead == blockSize)
             {
-                // Resize the buffer if necessary (for the last block)
-                if (bytesRead < blockSize)
-                {
-                    Array.Resize(ref buffer, bytesRead);
-                }
+                Log($"Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+                count += 1;
 
                 // Compute the hash for the current block
                 string hash = ComputeHash(buffer);
+                Log("Hash: " + hash);
                 int endByte = startByte + bytesRead - 1;
-                blockHashes.Add(Path.GetFileName(filePath), Tuple.Create(blockIndex, startByte, endByte, hash));
 
+                if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
+                {
+                    blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
+                }
+
+                // Add the block information to the list associated with the file name
+                blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
                 startByte = endByte + 1;
                 blockIndex++;
+                Log($"一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+
+                bytesRead = fileStream.Read(buffer, 0, blockSize);
             }
+
+// Process the last block if it exists
+            if (bytesRead > 0)
+            {
+                Array.Resize(ref buffer, bytesRead);
+                Log("bytesRead2" + bytesRead);
+
+                // Compute the hash for the current block
+                string hash = ComputeHash(buffer);
+                Log("Hash: " + hash);
+                int endByte = startByte + bytesRead - 1;
+
+                if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
+                {
+                    blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
+                }
+
+                // Add the block information to the list associated with the file name
+                blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
+                Log($"最后一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+            }
+            Log(filePath+"循环结束");
         }
 
         return blockHashes;
     }
+    private void Log(string message)
+    {
+        string logFilePath = "log.txt";
+    
+        // Check if the log file exists and delete it before creating a new one
+        if (File.Exists(logFilePath))
+        {
+            File.Delete(logFilePath);
+        }
 
+        using (StreamWriter sw = new StreamWriter(logFilePath, true))
+        {
+            sw.WriteLine($"{DateTime.Now}: {message}");
+        }
+    }
     private static string ComputeHash(byte[] data)
     {
         using (SHA256 sha256 = SHA256.Create())
