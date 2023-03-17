@@ -1,0 +1,10 @@
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.csproj.AssemblyReference.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.csproj.SuggestedBindingRedirects.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.Properties.Resources.resources
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.csproj.GenerateResource.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.csproj.CoreCompileInputs.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Cache.exe.config
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Cache.exe
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Cache.pdb
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.exe
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.pdb

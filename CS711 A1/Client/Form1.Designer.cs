@@ -54,7 +54,6 @@
             this.buttonRefreshList.TabIndex = 1;
             this.buttonRefreshList.Text = "buttonRefreshList";
             this.buttonRefreshList.UseVisualStyleBackColor = true;
-            this.buttonRefreshList.Click += new System.EventHandler(this.buttonRefreshList_Click);
             // 
             // buttonDownloadFile
             // 
@@ -64,7 +63,6 @@
             this.buttonDownloadFile.TabIndex = 2;
             this.buttonDownloadFile.Text = "buttonDownloadFile";
             this.buttonDownloadFile.UseVisualStyleBackColor = true;
-            this.buttonDownloadFile.Click += new System.EventHandler(this.buttonDownloadFile_Click);
             // 
             // pictureBoxPreview
             // 
