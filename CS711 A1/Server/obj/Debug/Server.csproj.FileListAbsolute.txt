@@ -9,3 +9,6 @@ C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\obj\Debug\Server.cspr
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\obj\Debug\Server.exe
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\obj\Debug\Server.pdb
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\obj\Debug\Server.Form1.resources
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\bin\Debug\Newtonsoft.Json.dll
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\bin\Debug\Newtonsoft.Json.xml
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Server\obj\Debug\Server.csproj.CopyComplete

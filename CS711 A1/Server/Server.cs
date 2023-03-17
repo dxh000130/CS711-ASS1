@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Server
 {
@@ -82,18 +85,67 @@ namespace Server
 
         // Get the list of files in the "File_Storage" directory
         string[] files = Directory.GetFiles(serverFilesDirectory);
-
+        int blockSize = 2048; // 2KB
         // Get the file names without the full path
+        List<Dictionary<string, Tuple<int, int, int, string>>> listOfDictionaries = new List<Dictionary<string, Tuple<int, int, int, string>>>();
         for (int i = 0; i < files.Length; i++)
         {
-            files[i] = Path.GetFileName(files[i]);
+            var blockHashes = GetFileBlockHashes(files[i], blockSize);
+
+             // for (int j = 0; j < blockHashes.Count; j++)
+             // {
+             //     Console.WriteLine($"Block {i}: {blockHashes[i]}");
+             // }
+
+             listOfDictionaries.Add(blockHashes);
+            //files[i] = blockHashes;
         }
 
         // Combine the file names into a single string, separated by semicolons
-        string fileList = string.Join(";", files);
-        return fileList;
+        string jsonString = JsonConvert.SerializeObject(listOfDictionaries);
+        //string fileList = string.Join(";", files);
+        return jsonString;
+    }
+    private static Dictionary<string, Tuple<int, int, int, string>> GetFileBlockHashes(string filePath, int blockSize)
+    {
+        var blockHashes = new Dictionary<string, Tuple<int, int, int, string>>();
+
+        using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        {
+            byte[] buffer = new byte[blockSize];
+            int bytesRead;
+            int blockIndex = 0;
+            int startByte = 0;
+
+            while ((bytesRead = fileStream.Read(buffer, 0, blockSize)) > 0)
+            {
+                // Resize the buffer if necessary (for the last block)
+                if (bytesRead < blockSize)
+                {
+                    Array.Resize(ref buffer, bytesRead);
+                }
+
+                // Compute the hash for the current block
+                string hash = ComputeHash(buffer);
+                int endByte = startByte + bytesRead - 1;
+                blockHashes.Add(Path.GetFileName(filePath), Tuple.Create(blockIndex, startByte, endByte, hash));
+
+                startByte = endByte + 1;
+                blockIndex++;
+            }
+        }
+
+        return blockHashes;
     }
 
+    private static string ComputeHash(byte[] data)
+    {
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(data);
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+        }
+    }
     private async Task<byte[]> ServeFileFragmentAsync(string fileName, int startByte, int fragmentSize)
     {
         // Serve a file fragment from the server
