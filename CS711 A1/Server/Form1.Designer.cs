@@ -84,7 +84,7 @@
             // 
             // StatusLabel
             // 
-            this.StatusLabel.Location = new System.Drawing.Point(452, 546);
+            this.StatusLabel.Location = new System.Drawing.Point(454, 550);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(666, 144);
             this.StatusLabel.TabIndex = 5;
