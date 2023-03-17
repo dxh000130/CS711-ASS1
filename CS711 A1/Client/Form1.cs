@@ -22,22 +22,22 @@ namespace Client
         }
         public async void buttonRefreshList_Click(object sender, EventArgs e)
         {
-            label1.Text = "连接。。";
+            label1.Text = "Connecting....";
             using (TcpClient client = new TcpClient())
             {
                 await client.ConnectAsync(CACHE_SERVER_HOST, CACHE_SERVER_PORT);
-                label1.Text = "连接成功";
+                label1.Text = "Connected";
                 using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
                 using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
                 {
                     // Request the list of files from the cache server
                     await writer.WriteLineAsync("LIST_FILES");
                     await writer.FlushAsync();
-                    label1.Text = "发送成功";
+                    label1.Text = "Sent Request!";
                     // Read the file list from the cache server
                     string fileList = await reader.ReadLineAsync();
                     string[] files = fileList.Split(';');
-        
+                    label1.Text = "Reply received!";
                     // Update the ListBox with the list of files
                     listBoxFiles.Items.Clear();
                     listBoxFiles.Items.AddRange(files);
