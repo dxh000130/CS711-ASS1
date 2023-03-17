@@ -40,9 +40,8 @@ namespace Server
         using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
         using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
         {
-            StatusLabelCallback?.Invoke(client.ToString());
             string request = await reader.ReadLineAsync();
-            StatusLabelCallback?.Invoke(request);
+            
             if (request.StartsWith("LIST_FILES"))
             {
                 StatusLabelCallback?.Invoke("Client request file list.");
@@ -56,6 +55,7 @@ namespace Server
                 // Serve a file fragment from the server
                 string[] requestParts = request.Split(' ');
                 string fileName = requestParts[1];
+                StatusLabelCallback?.Invoke(fileName);
                 int startByte = int.Parse(requestParts[2]);
                 int fragmentSize = int.Parse(requestParts[3]);
 

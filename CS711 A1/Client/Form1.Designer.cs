@@ -64,6 +64,7 @@
             this.buttonDownloadFile.TabIndex = 2;
             this.buttonDownloadFile.Text = "buttonDownloadFile";
             this.buttonDownloadFile.UseVisualStyleBackColor = true;
+            this.buttonDownloadFile.Click += new System.EventHandler(this.buttonDownloadFile_Click);
             // 
             // pictureBoxPreview
             // 

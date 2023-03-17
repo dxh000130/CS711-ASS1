@@ -14,7 +14,7 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-        private const int CACHE_SERVER_PORT = 8081;
+        private const int CACHE_SERVER_PORT = 8080;
         private const string CACHE_SERVER_HOST = "127.0.0.1";
         public Form1()
         {
@@ -67,8 +67,12 @@ namespace Client
         
                     // Read the file content from the cache server
                     string fileContent = await reader.ReadLineAsync();
+
+                    label1.Text = fileContent;
                     byte[] fileBytes = Convert.FromBase64String(fileContent);
-        
+
+                    
+                    
                     // Load the downloaded image into the PictureBox
                     using (MemoryStream stream = new MemoryStream(fileBytes))
                     {
