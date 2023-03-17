@@ -12,7 +12,7 @@ namespace Server
 {
     public class Server
 {
-    public const int SERVER_PORT = 8081;
+    public const int SERVER_PORT = 8083;
     public const string SERVER_HOST = "127.0.0.1";
     private readonly TcpListener _listener;
 
@@ -41,7 +41,7 @@ namespace Server
     {
 
         using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
-        using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
+        using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8) { AutoFlush = true })
         {
             string request = await reader.ReadLineAsync();
             

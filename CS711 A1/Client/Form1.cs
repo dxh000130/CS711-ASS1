@@ -15,7 +15,7 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-        private const int CACHE_SERVER_PORT = 8080;
+        private const int CACHE_SERVER_PORT = 8082;
         private const string CACHE_SERVER_HOST = "127.0.0.1";
         public Form1()
         {
