@@ -19,7 +19,11 @@ namespace Server
     public Server()
     {
         _listener = new TcpListener(IPAddress.Parse(SERVER_HOST), SERVER_PORT);
-        
+        // Check if the log file exists and delete it before creating a new one
+        if (File.Exists("Serverlog.txt"))
+        {
+            File.Delete("Serverlog.txt");
+        }
     }
     public Action<string> OutputCallback { get; set; }
     public Action<string> StatusLabelCallback { get; set; }
@@ -62,8 +66,9 @@ namespace Server
                 StatusLabelCallback?.Invoke(fileName);
                 int startByte = int.Parse(requestParts[2]);
                 int fragmentSize = int.Parse(requestParts[3]);
-
+                Log(fileName + startByte + fragmentSize);
                 byte[] fileFragment = await ServeFileFragmentAsync(fileName, startByte, fragmentSize);
+                Log(Convert.ToBase64String(fileFragment));
                 await writer.WriteLineAsync(Convert.ToBase64String(fileFragment));
             }
 
@@ -123,12 +128,12 @@ namespace Server
             bytesRead = fileStream.Read(buffer, 0, blockSize);
             while (bytesRead == blockSize)
             {
-                Log($"Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+                //Log($"Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
                 count += 1;
 
                 // Compute the hash for the current block
                 string hash = ComputeHash(buffer);
-                Log("Hash: " + hash);
+                //Log("Hash: " + hash);
                 int endByte = startByte + bytesRead - 1;
 
                 if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
@@ -140,7 +145,7 @@ namespace Server
                 blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
                 startByte = endByte + 1;
                 blockIndex++;
-                Log($"一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+                //Log($"一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
 
                 bytesRead = fileStream.Read(buffer, 0, blockSize);
             }
@@ -149,11 +154,11 @@ namespace Server
             if (bytesRead > 0)
             {
                 Array.Resize(ref buffer, bytesRead);
-                Log("bytesRead2" + bytesRead);
+                //Log("bytesRead2" + bytesRead);
 
                 // Compute the hash for the current block
                 string hash = ComputeHash(buffer);
-                Log("Hash: " + hash);
+                //Log("Hash: " + hash);
                 int endByte = startByte + bytesRead - 1;
 
                 if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
@@ -163,7 +168,7 @@ namespace Server
 
                 // Add the block information to the list associated with the file name
                 blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
-                Log($"最后一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+                //Log($"最后一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
             }
             Log(filePath+"循环结束");
         }
@@ -172,13 +177,9 @@ namespace Server
     }
     private void Log(string message)
     {
-        string logFilePath = "log.txt";
+        string logFilePath = "Serverlog.txt";
     
-        // Check if the log file exists and delete it before creating a new one
-        if (File.Exists(logFilePath))
-        {
-            File.Delete(logFilePath);
-        }
+        
 
         using (StreamWriter sw = new StreamWriter(logFilePath, true))
         {
@@ -196,7 +197,7 @@ namespace Server
     private async Task<byte[]> ServeFileFragmentAsync(string fileName, int startByte, int fragmentSize)
     {
         // Serve a file fragment from the server
-        string filePath = Path.Combine("server_files", fileName); // Replace "server_files" with the actual directory holding the files
+        string filePath = Path.Combine(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "File_Storage")), fileName); // Replace "server_files" with the actual directory holding the files
         using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
         {
             byte[] buffer = new byte[fragmentSize];

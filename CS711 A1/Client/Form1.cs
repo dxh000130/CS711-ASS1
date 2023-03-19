@@ -15,11 +15,16 @@ namespace Client
 {
     public partial class Form1 : Form
     {
-        private const int CACHE_SERVER_PORT = 8081;
+        private const int CACHE_SERVER_PORT = 8080;
         private const string CACHE_SERVER_HOST = "127.0.0.1";
         public Form1()
         {
             InitializeComponent();
+            if (File.Exists("Clientlog.txt"))
+            {
+                File.Delete("Clientlog.txt");
+            }
+
         }
         public async void buttonRefreshList_Click(object sender, EventArgs e)
         {
@@ -50,7 +55,7 @@ namespace Client
                             listBoxFiles.Items.Add(entry.Key);
                         }
                     }
-                    Log(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
+                    //Log(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
                 }
             }
         }
@@ -83,14 +88,10 @@ namespace Client
         }
         private void Log(string message)
         {
-            string logFilePath = "log.txt";
+            string logFilePath = "Clientlog.txt";
     
             // Check if the log file exists and delete it before creating a new one
-            if (File.Exists(logFilePath))
-            {
-                File.Delete(logFilePath);
-            }
-
+            
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {
                 sw.WriteLine($"{DateTime.Now}: {message}");
@@ -115,23 +116,44 @@ namespace Client
                 {
                     // Request the file from the cache server
                     await writer.WriteLineAsync($"GET_FILE {fileName}");
+                    Log("发送下载文件指令");
                     await writer.FlushAsync();
         
                     // Read the file content from the cache server
                     string fileContent = await reader.ReadLineAsync();
+                    Log("收到回复");
+                    Log(fileContent);
+                    List<string> resultList = JsonConvert.DeserializeObject<List<string>>(fileContent);
+                    byte[] completeFileBytes = CombineBase64List(resultList);
 
-                    label1.Text = fileContent;
-                    byte[] fileBytes = Convert.FromBase64String(fileContent);
-
-                    
+                    // 将完整的byte[]写入文件
+                    string outputFilePath = fileName; // 输出文件路径
+                    File.WriteAllBytes(outputFilePath, completeFileBytes);
+                    label1.Text = "文件已成功合并和保存.";
                     
                     // Load the downloaded image into the PictureBox
-                    using (MemoryStream stream = new MemoryStream(fileBytes))
+                    using (MemoryStream stream = new MemoryStream(completeFileBytes))
                     {
                         pictureBoxPreview.Image = Image.FromStream(stream);
                     }
                 }
             }
+        }
+        static byte[] CombineBase64List(List<string> base64List)
+        {
+            List<byte[]> byteArrays = new List<byte[]>();
+
+            // 将base64解码为byte[]
+            foreach (string base64 in base64List)
+            {
+                byte[] decodedBytes = Convert.FromBase64String(base64);
+                byteArrays.Add(decodedBytes);
+            }
+
+            // 合并byte[]列表为一个完整的byte[]
+            byte[] completeFileBytes = byteArrays.SelectMany(byteArray => byteArray).ToArray();
+
+            return completeFileBytes;
         }
     }
     
