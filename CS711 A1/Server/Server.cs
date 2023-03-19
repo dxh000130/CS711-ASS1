@@ -65,7 +65,7 @@ namespace Server
                 Log_Detail("Filename: "+fileName + "StartByte: " + startByte + "fragmentSize: "+ fragmentSize);
                 byte[] fileFragment = await ServeFileFragmentAsync(fileName, startByte, fragmentSize);
                 Log_Detail("Send to Cache or Client");
-                Log_Detail("BASE64: "+BitConverter.ToString(fileFragment).Replace("-", ""));
+                Log_Detail("hexadecimal: "+BitConverter.ToString(fileFragment).Replace("-", ""));
                 await writer.WriteLineAsync(BitConverter.ToString(fileFragment).Replace("-", ""));
             }
 

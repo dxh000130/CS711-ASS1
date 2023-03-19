@@ -24,11 +24,12 @@ namespace Client
             if (File.Exists("Client_detailed_log.txt"))
             {
                 File.Delete("Client_detailed_log.txt");
-                Log("Log file exists and delete it");
+                
             }
             if (File.Exists("Client_log.txt"))
             {
                 File.Delete("Client_log.txt");
+                Log("Log file exists and delete it");
             }
 
         }
@@ -105,7 +106,7 @@ namespace Client
         }
         private void Log_Detail(string message)
         {
-            string logFilePath = "Client_detailed_log";
+            string logFilePath = "Client_detailed_log.txt";
             
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {
@@ -142,7 +143,7 @@ namespace Client
                     Log_Detail(fileContent);
                     // Convert from json to string list
                     List<string> resultList = JsonConvert.DeserializeObject<List<string>>(fileContent);
-                    byte[] completeFileBytes = CombineBase64List(resultList);
+                    byte[] completeFileBytes = CombinehexadecimalList(resultList);
 
                     // Write the entire byte[] to a file.
                     string outputFilePath = fileName; // Output file
@@ -158,18 +159,18 @@ namespace Client
                 }
             }
         }
-        static byte[] CombineBase64List(List<string> base64List)
+        static byte[] CombinehexadecimalList(List<string> hexadecimalList)
         {
             List<byte[]> byteArrays = new List<byte[]>();
 
-            // Decode base64 into byte[].
-            foreach (string base64 in base64List)
+            // Decode hexadecimal into byte[].
+            foreach (string hexadecimal in hexadecimalList)
             {
-                int numberChars = base64.Length;
+                int numberChars = hexadecimal.Length;
                 byte[] decodedBytes = new byte[numberChars / 2];
                 for (int i = 0; i < numberChars; i += 2)
-                    decodedBytes[i / 2] = Convert.ToByte(base64.Substring(i, 2), 16);
-                //byte[] decodedBytes = Convert.FromBase64String(base64);
+                    decodedBytes[i / 2] = Convert.ToByte(hexadecimal.Substring(i, 2), 16);
+                //byte[] decodedBytes = Convert.FromhexadecimalString(hexadecimal);
                 byteArrays.Add(decodedBytes);
             }
 
@@ -177,6 +178,14 @@ namespace Client
             byte[] completeFileBytes = byteArrays.SelectMany(byteArray => byteArray).ToArray();
 
             return completeFileBytes;
+        }
+        private void Open_Log_f(object sender, EventArgs eventArgs)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + "Client_log.txt");
+        }
+        private void Open_DLog_f(object sender, EventArgs eventArgs)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + "Client_detailed_log.txt");
         }
     }
     

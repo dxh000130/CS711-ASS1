@@ -80,7 +80,7 @@ namespace Cache
                             if (kv.Key == fileName)
                             {
                                 Log("Find File Name in File List!");
-                                List<string> File_BLock_Base64 = new List<string>();
+                                List<string> File_BLock_hexadecimal = new List<string>();
                                 var Total_number_of_file_blocks = 0;
                                 var Number_of_file_blocks_that_exist = 0;
                                 foreach (var tuple in kv.Value)
@@ -91,7 +91,7 @@ namespace Cache
                                     {
                                         Number_of_file_blocks_that_exist += 1;
                                         Log_Detail("file_block_hash Exist!");
-                                        File_BLock_Base64.Add(_cache[file_block_hash]);
+                                        File_BLock_hexadecimal.Add(_cache[file_block_hash]);
                                         Log_Detail("Add " + _cache[file_block_hash]);
                                     }
                                     else
@@ -106,11 +106,11 @@ namespace Cache
                                             {
                                                 await serverWriter.WriteLineAsync($"GET_FILE_FRAGMENT {fileName} {tuple.Item2} {fragmentSize}");
                                                 Log_Detail("Send request To Server");
-                                                string fileFragmentBase64 = await serverReader.ReadLineAsync();
-                                                Log_Detail("Server reply" + fileFragmentBase64);
-                                                _cache[file_block_hash] = fileFragmentBase64;
-                                                Log_Detail("Add " + fileFragmentBase64);
-                                                File_BLock_Base64.Add(fileFragmentBase64);
+                                                string fileFragmenthexadecimal = await serverReader.ReadLineAsync();
+                                                Log_Detail("Server reply: " + fileFragmenthexadecimal);
+                                                _cache[file_block_hash] = fileFragmenthexadecimal;
+                                                Log_Detail("Add " + fileFragmenthexadecimal);
+                                                File_BLock_hexadecimal.Add(fileFragmenthexadecimal);
                                             }
                                         }
                                     }
@@ -118,7 +118,7 @@ namespace Cache
 
                                 Log("response: " + (double)Number_of_file_blocks_that_exist/Total_number_of_file_blocks*100 + "% of file " + fileName +
                                     " was constructed with the cached data");
-                                string jsonString = JsonConvert.SerializeObject(File_BLock_Base64);
+                                string jsonString = JsonConvert.SerializeObject(File_BLock_hexadecimal);
                                 await writer.WriteLineAsync(jsonString);
                                 Log("Send back to Client.");
                             }
@@ -167,6 +167,20 @@ namespace Cache
             {
                 sw.WriteLine($"{DateTime.Now}: {message}");
             }
+        }
+        private void Clear_Button(object sender, EventArgs eventArgs)
+        {
+            _cache = new Dictionary<string, string>();
+            Log("Clear Cache!");
+        }
+
+        private void Open_Log_f(object sender, EventArgs eventArgs)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + "Cache_log.txt");
+        }
+        private void Open_DLog_f(object sender, EventArgs eventArgs)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + "Cache_detailed_log.txt");
         }
     }
 }
