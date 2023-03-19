@@ -43,6 +43,7 @@
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "btnStart";
             this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // btnStop
             // 
@@ -52,6 +53,7 @@
             this.btnStop.TabIndex = 1;
             this.btnStop.Text = "btnStop";
             this.btnStop.UseVisualStyleBackColor = true;
+            //this.btnStop.Click += new System.EventHandler(this.buttonRefreshList_Click);
             // 
             // txtLog
             // 

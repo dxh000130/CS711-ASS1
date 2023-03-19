@@ -8,3 +8,7 @@ C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Cache.exe
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Cache.pdb
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.exe
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.pdb
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Newtonsoft.Json.dll
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Newtonsoft.Json.xml
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.Form1.resources
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.csproj.CopyComplete
