@@ -30,64 +30,62 @@
         private void InitializeComponent()
         {
             this.btnStart = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.lblCacheStatus = new System.Windows.Forms.Label();
+            this.Server_IP_label = new System.Windows.Forms.Label();
+            this.Client_IP_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(63, 45);
+            this.btnStart.Location = new System.Drawing.Point(665, 12);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(123, 41);
             this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "btnStart";
+            this.btnStart.Text = "Start Cache";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
-            // btnStop
-            // 
-            this.btnStop.Location = new System.Drawing.Point(247, 49);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(133, 36);
-            this.btnStop.TabIndex = 1;
-            this.btnStop.Text = "btnStop";
-            this.btnStop.UseVisualStyleBackColor = true;
-            //this.btnStop.Click += new System.EventHandler(this.buttonRefreshList_Click);
-            // 
-            // txtLog
-            // 
-            this.txtLog.Location = new System.Drawing.Point(57, 127);
-            this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(541, 28);
-            this.txtLog.TabIndex = 2;
-            // 
             // lblCacheStatus
             // 
-            this.lblCacheStatus.Location = new System.Drawing.Point(43, 341);
+            this.lblCacheStatus.Location = new System.Drawing.Point(22, 148);
             this.lblCacheStatus.Name = "lblCacheStatus";
-            this.lblCacheStatus.Size = new System.Drawing.Size(495, 60);
+            this.lblCacheStatus.Size = new System.Drawing.Size(625, 251);
             this.lblCacheStatus.TabIndex = 3;
-            this.lblCacheStatus.Text = "lblCacheStatus";
+            this.lblCacheStatus.Text = "Cache Server Status";
+            // 
+            // Server_IP_label
+            // 
+            this.Server_IP_label.Location = new System.Drawing.Point(12, 8);
+            this.Server_IP_label.Name = "Server_IP_label";
+            this.Server_IP_label.Size = new System.Drawing.Size(511, 45);
+            this.Server_IP_label.TabIndex = 4;
+            // 
+            // Client_IP_label
+            // 
+            this.Client_IP_label.Location = new System.Drawing.Point(13, 67);
+            this.Client_IP_label.Name = "Client_IP_label";
+            this.Client_IP_label.Size = new System.Drawing.Size(509, 48);
+            this.Client_IP_label.TabIndex = 5;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.Client_IP_label);
+            this.Controls.Add(this.Server_IP_label);
             this.Controls.Add(this.lblCacheStatus);
-            this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
 
+        private System.Windows.Forms.Label Client_IP_label;
+
+        private System.Windows.Forms.Label Server_IP_label;
+
         private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Label lblCacheStatus;
 
         #endregion

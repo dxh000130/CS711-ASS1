@@ -1,0 +1,17 @@
+2023/3/20 11:14:28: Log file exists and delete it
+2023/3/20 11:14:35: Listening on 127.0.0.1:8080
+2023/3/20 11:14:38: LIST_FILES
+2023/3/20 11:14:38: Client request File List
+2023/3/20 11:14:38: Send LIST_FILES to Server
+2023/3/20 11:14:39: Receive FIle_List from Server
+2023/3/20 11:14:39: File_List send to Client
+2023/3/20 11:14:40: GET_FILE test1.bmp
+2023/3/20 11:14:40: Client Request Download File: test1.bmp
+2023/3/20 11:14:40: Find File Name in File List!
+2023/3/20 11:14:42: response: 0% of file test1.bmp was constructed with the cached data
+2023/3/20 11:14:42: Send back to Client.
+2023/3/20 11:14:44: GET_FILE test2.bmp
+2023/3/20 11:14:44: Client Request Download File: test2.bmp
+2023/3/20 11:14:44: Find File Name in File List!
+2023/3/20 11:14:44: response: 99.7398091934085% of file test2.bmp was constructed with the cached data
+2023/3/20 11:14:44: Send back to Client.

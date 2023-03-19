@@ -25,7 +25,20 @@ namespace Server
             server.StatusLabelCallback = UpdateStatusLable;
             string currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             StorageFilePathLabel.Text = Path.GetFullPath(Path.Combine(currentDirectory, "..", "..", ".."));
-            IPLable.Text = "Stop listening: " + IPAddress.Parse(Server.SERVER_HOST) + ":" + Server.SERVER_PORT.ToString();
+            IPLable.Text = "Not Start listening: " + IPAddress.Parse(Server.SERVER_HOST) + ":" + Server.SERVER_PORT.ToString();
+            Log("Not Start listening: " + IPAddress.Parse(Server.SERVER_HOST) + ":" +
+                       Server.SERVER_PORT.ToString());
+            // Check if the log file exists and delete it
+            if (File.Exists("Server_detailed_log.txt"))
+            {
+                File.Delete("Server_detailed_log.txt");
+                
+            }
+            if (File.Exists("Server_log.txt"))
+            {
+                File.Delete("Server_log.txt");
+                Log("Log file exists and delete it");
+            }
         }
         private void LoadFileList()
         {
@@ -40,6 +53,7 @@ namespace Server
             {
                 FilesListbox.Items.Add(Path.GetFileName(file));
             }
+            Log("List all files.");
         }
         private void UpdateIPLable(string text)
         {
@@ -55,6 +69,7 @@ namespace Server
         {
             if (InvokeRequired)
             {
+                Log(text);
                 Invoke(new Action<string>(UpdateStatusLable), text);
                 return;
             }
@@ -64,7 +79,6 @@ namespace Server
         private async void startButton_Click(object sender, EventArgs e)
         {
             startButton.Enabled = false;
-            //StorageFilePathLabel.Text = "Starting server...";
             try
             {
                 await server.StartAsync();
@@ -75,12 +89,11 @@ namespace Server
                 throw;
             }
             
-            //StorageFilePathLabel.Text = "Server started";
         }
         private void btnAddFile_Click_1(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
+            openFileDialog.Filter = "Image Files (*.bmp;*.jpg;*.jpeg;*.gif;*.png)|*.bmp;*.jpg;*.jpeg;*.gif;*.png";
             openFileDialog.Title = "Select an Image File";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -91,19 +104,43 @@ namespace Server
 
                 if (!Directory.Exists(destinationDirectory))
                 {
-                    StatusLabel.Text = "文件夹不存在，创立新文件夹";
+                    StatusLabel.Text = "Destination Folder does not exist, creating a new folder.";
+                    Log("Destination Folder does not exist, creating a new folder.");
                     Directory.CreateDirectory(destinationDirectory);
                 }
                 if (File.Exists(destinationFilePath))
                 {
                     StatusLabel.Text = @"File already exist";
+                    Log("File already exist");
                 }
                 else
                 {
                     File.Copy(sourceFilePath, destinationFilePath, true);
                     StatusLabel.Text = $@"File added: {Path.GetFileName(sourceFilePath)}";
+                    Log($@"File added: {Path.GetFileName(sourceFilePath)}");
                     LoadFileList();
                 }
+            }
+        }
+
+        private static void Log(string message)
+        {
+            string logFilePath = "Server_log.txt";
+            Log_Detail(message);
+        
+            using (StreamWriter sw = new StreamWriter(logFilePath, true))
+            {
+                sw.WriteLine($"{DateTime.Now}: {message}");
+            }
+        }
+
+        private static void Log_Detail(string message)
+        {
+            string logFilePath = "Server_detailed_log.txt";
+        
+            using (StreamWriter sw = new StreamWriter(logFilePath, true))
+            {
+                sw.WriteLine($"{DateTime.Now}: {message}");
             }
         }
     }

@@ -20,32 +20,38 @@ namespace Client
         public Form1()
         {
             InitializeComponent();
-            if (File.Exists("Clientlog.txt"))
+            // Check if the log file exists and delete it
+            if (File.Exists("Client_detailed_log.txt"))
             {
-                File.Delete("Clientlog.txt");
+                File.Delete("Client_detailed_log.txt");
+                Log("Log file exists and delete it");
+            }
+            if (File.Exists("Client_log.txt"))
+            {
+                File.Delete("Client_log.txt");
             }
 
         }
         public async void buttonRefreshList_Click(object sender, EventArgs e)
         {
-            label1.Text = "Connecting....";
+            Log("Refresh File List");
+            Log("Connecting....");
             using (TcpClient client = new TcpClient())
             {
                 await client.ConnectAsync(CACHE_SERVER_HOST, CACHE_SERVER_PORT);
-                label1.Text = "Connected";
+                Log("Connected");
                 using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
                 using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
                 {
                     // Request the list of files from the cache server
                     await writer.WriteLineAsync("LIST_FILES");
                     await writer.FlushAsync();
-                    label1.Text = "Sent Request!";
+                    Log("Sent Request! Please Wait For response");
                     // Read the file list from the cache server
                     string fileList = await reader.ReadLineAsync();
-                    label1.Text = fileList;
+                    // Convert to List<Dictionary<string, List<Tuple<int, int, int, string>>>> from json
                     List<Dictionary<string, List<Tuple<int, int, int, string>>>> deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, List<Tuple<int, int, int, string>>>>>(fileList);
-                    //string[] files = fileList.Split(';');
-                    label1.Text = "Reply received!";
+                    Log("Reply received!");
                     // Update the ListBox with the list of files
                     listBoxFiles.Items.Clear();
                     foreach (var dictionary in deserializedListOfDictionaries)
@@ -55,11 +61,12 @@ namespace Client
                             listBoxFiles.Items.Add(entry.Key);
                         }
                     }
-                    //Log(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
+                    Log_Detail(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
                 }
             }
         }
         public string ConvertListOfDictionariesToString(List<Dictionary<string, List<Tuple<int, int, int, string>>>> listOfDictionaries)
+        // Displaying hash values for all file blocks in each file.
         {
             StringBuilder sb = new StringBuilder();
 
@@ -88,9 +95,17 @@ namespace Client
         }
         private void Log(string message)
         {
-            string logFilePath = "Clientlog.txt";
-    
-            // Check if the log file exists and delete it before creating a new one
+            string logFilePath = "Client_log.txt";
+            label1.Text = message;
+            Log_Detail(message);
+            using (StreamWriter sw = new StreamWriter(logFilePath, true))
+            {
+                sw.WriteLine($"{DateTime.Now}: {message}");
+            }
+        }
+        private void Log_Detail(string message)
+        {
+            string logFilePath = "Client_detailed_log";
             
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {
@@ -102,39 +117,43 @@ namespace Client
             if (listBoxFiles.SelectedItem == null)
             {
                 MessageBox.Show("Please select a file from the list.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Log("Error : Please select a file from the list.");
                 return;
             }
         
             string fileName = listBoxFiles.SelectedItem.ToString();
-        
+            Log("Select " + fileName);
             using (TcpClient client = new TcpClient())
             {
+                Log("Connecting....");
                 await client.ConnectAsync(CACHE_SERVER_HOST, CACHE_SERVER_PORT);
-        
+                Log("Connected");
                 using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
                 using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
                 {
                     // Request the file from the cache server
                     await writer.WriteLineAsync($"GET_FILE {fileName}");
-                    Log("发送下载文件指令");
+                    Log("Send download file command to cache, Please Wait For response");
                     await writer.FlushAsync();
         
                     // Read the file content from the cache server
                     string fileContent = await reader.ReadLineAsync();
-                    Log("收到回复");
-                    Log(fileContent);
+                    Log("Received response from cache!");
+                    Log_Detail(fileContent);
+                    // Convert from json to string list
                     List<string> resultList = JsonConvert.DeserializeObject<List<string>>(fileContent);
                     byte[] completeFileBytes = CombineBase64List(resultList);
 
-                    // 将完整的byte[]写入文件
-                    string outputFilePath = fileName; // 输出文件路径
+                    // Write the entire byte[] to a file.
+                    string outputFilePath = fileName; // Output file
                     File.WriteAllBytes(outputFilePath, completeFileBytes);
-                    label1.Text = "文件已成功合并和保存.";
-                    
+                    Log("The file has been successfully merged and saved.");
+
                     // Load the downloaded image into the PictureBox
                     using (MemoryStream stream = new MemoryStream(completeFileBytes))
                     {
                         pictureBoxPreview.Image = Image.FromStream(stream);
+                        pictureBoxPreview.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
                 }
             }
@@ -143,14 +162,18 @@ namespace Client
         {
             List<byte[]> byteArrays = new List<byte[]>();
 
-            // 将base64解码为byte[]
+            // Decode base64 into byte[].
             foreach (string base64 in base64List)
             {
-                byte[] decodedBytes = Convert.FromBase64String(base64);
+                int numberChars = base64.Length;
+                byte[] decodedBytes = new byte[numberChars / 2];
+                for (int i = 0; i < numberChars; i += 2)
+                    decodedBytes[i / 2] = Convert.ToByte(base64.Substring(i, 2), 16);
+                //byte[] decodedBytes = Convert.FromBase64String(base64);
                 byteArrays.Add(decodedBytes);
             }
 
-            // 合并byte[]列表为一个完整的byte[]
+            // Merge a list of byte[] into a single, complete byte[].
             byte[] completeFileBytes = byteArrays.SelectMany(byteArray => byteArray).ToArray();
 
             return completeFileBytes;

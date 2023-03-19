@@ -29,19 +29,26 @@ namespace Cache
         {
             InitializeComponent();
             _cache = new Dictionary<string, string>();
-            if (File.Exists("Cachelog.txt"))
+            Server_IP_label.Text = SERVER_HOST + ":" + SERVER_PORT;
+            Client_IP_label.Text = CACHE_SERVER_HOST + ":" + CACHE_SERVER_PORT;
+            
+            // Check if the log file exists and delete it
+            if (File.Exists("Cache_log.txt"))
             {
-                File.Delete("Cachelog.txt");
+                File.Delete("Cache_log.txt");
+                Log("Log file exists and delete it");
             }
-            // _cacheServer.LogCallback = Log;
-            // _cacheServer.CacheStatusCallback = UpdateCacheStatus;
+            if (File.Exists("Cache_detailed_log.txt"))
+            {
+                File.Delete("Cache_detailed_log.txt");
+            }
         }
         private void buttonStart_Click(object sender, EventArgs e)
         {
             _listener = new TcpListener(IPAddress.Parse(CACHE_SERVER_HOST), CACHE_SERVER_PORT);
             _listener.Start();
-
-            lblCacheStatus.Text = $"Listening on {CACHE_SERVER_HOST}:{CACHE_SERVER_PORT}";
+            btnStart.Enabled = false;
+            Log($"Listening on {CACHE_SERVER_HOST}:{CACHE_SERVER_PORT}");
 
             _ = Task.Run(async () =>
             {
@@ -74,42 +81,44 @@ namespace Cache
                             {
                                 Log("Find File Name in File List!");
                                 List<string> File_BLock_Base64 = new List<string>();
+                                var Total_number_of_file_blocks = 0;
+                                var Number_of_file_blocks_that_exist = 0;
                                 foreach (var tuple in kv.Value)
                                 {
+                                    Total_number_of_file_blocks += 1;
                                     string file_block_hash = tuple.Item4;
                                     if (_cache.ContainsKey(file_block_hash))
                                     {
-                                        Log("file_block_hash Exist!");
+                                        Number_of_file_blocks_that_exist += 1;
+                                        Log_Detail("file_block_hash Exist!");
                                         File_BLock_Base64.Add(_cache[file_block_hash]);
-                                        Log("Add " + _cache[file_block_hash]);
-                                        //await writer.WriteLineAsync(Convert.ToBase64String(_cache[file_block_hash]));
+                                        Log_Detail("Add " + _cache[file_block_hash]);
                                     }
                                     else
                                     {
-                                        Log("file_block_hash Doesn't Exist!");
+                                        Log_Detail("file_block_hash Doesn't Exist!");
                                         using (TcpClient serverClient = new TcpClient())
                                         {
                                             await serverClient.ConnectAsync(SERVER_HOST, SERVER_PORT);
-                                            Log("Connect To Server");
+                                            Log_Detail("Connect To Server");
                                             using (StreamReader serverReader = new StreamReader(serverClient.GetStream(), Encoding.UTF8))
                                             using (StreamWriter serverWriter = new StreamWriter(serverClient.GetStream(), Encoding.UTF8) { AutoFlush = true })
                                             {
                                                 await serverWriter.WriteLineAsync($"GET_FILE_FRAGMENT {fileName} {tuple.Item2} {fragmentSize}");
-                                                Log("Send request To Server");
+                                                Log_Detail("Send request To Server");
                                                 string fileFragmentBase64 = await serverReader.ReadLineAsync();
-                                                Log("Server reply" + fileFragmentBase64);
-                                                //byte[] fileFragment = Convert.FromBase64String(fileFragmentBase64);
+                                                Log_Detail("Server reply" + fileFragmentBase64);
                                                 _cache[file_block_hash] = fileFragmentBase64;
-                                                Log("Add " + fileFragmentBase64);
+                                                Log_Detail("Add " + fileFragmentBase64);
                                                 File_BLock_Base64.Add(fileFragmentBase64);
-                                                //await writer.WriteLineAsync(fileFragmentBase64);
                                             }
                                         }
                                     }
                                 }
-                                Log("转换前" + File_BLock_Base64);
+
+                                Log("response: " + (double)Number_of_file_blocks_that_exist/Total_number_of_file_blocks*100 + "% of file " + fileName +
+                                    " was constructed with the cached data");
                                 string jsonString = JsonConvert.SerializeObject(File_BLock_Base64);
-                                Log("转换后" + jsonString);
                                 await writer.WriteLineAsync(jsonString);
                                 Log("Send back to Client.");
                             }
@@ -138,18 +147,21 @@ namespace Cache
                         }
                     }
                 }
-                else
-                {
-                    await writer.WriteLineAsync("INVALID_REQUEST");
-                }
             }
         }
         private void Log(string message)
         {
-            string logFilePath = "Cachelog.txt";
+            string logFilePath = "Cache_log.txt";
             lblCacheStatus.Text = message;
-            // Check if the log file exists and delete it before creating a new one
-           
+            Log_Detail(message);
+            using (StreamWriter sw = new StreamWriter(logFilePath, true))
+            {
+                sw.WriteLine($"{DateTime.Now}: {message}");
+            }
+        }
+        private void Log_Detail(string message)
+        {
+            string logFilePath = "Cache_detailed_log.txt";
 
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {
