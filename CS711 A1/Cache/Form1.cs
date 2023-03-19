@@ -10,6 +10,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace Cache
 {
@@ -17,7 +18,7 @@ namespace Cache
     {
         private const int CACHE_SERVER_PORT = 8080;
         private const string CACHE_SERVER_HOST = "127.0.0.1";
-
+        private List<Dictionary<string, List<Tuple<int, int, int, string>>>> deserializedListOfDictionaries;
         private const int SERVER_PORT = 8081;
         private const string SERVER_HOST = "127.0.0.1";
 
@@ -55,13 +56,28 @@ namespace Cache
             {
                 string request = await reader.ReadLineAsync();
 
-                if (request.StartsWith("GET_FILE_FRAGMENT"))
+                if (request.StartsWith("GET_FILE"))
                 {
                     string[] requestParts = request.Split(' ');
                     string fileName = requestParts[1];
-                    int startByte = int.Parse(requestParts[2]);
-                    int fragmentSize = int.Parse(requestParts[3]);
-                    string cacheKey = $"{fileName}_{startByte}";
+                    foreach (var dict in deserializedListOfDictionaries)
+                    {
+                        foreach (var kv in dict)
+                        {
+                            if (kv.Key == fileName)
+                            {
+                                foreach (var tuple in kv.Value)
+                                {
+                                    string lastString = tuple.Item4;
+                                    Console.WriteLine(lastString);
+                                }
+                            }
+                            
+                        }
+                    }
+                    //int startByte = int.Parse(requestParts[2]);
+                    //int fragmentSize = int.Parse(requestParts[3]);
+                    //string cacheKey = $"{fileName}_{startByte}";
 
                     if (_cache.ContainsKey(cacheKey))
                     {
@@ -88,6 +104,8 @@ namespace Cache
                 }
                 else if (request.StartsWith("LIST_FILES"))
                 {
+                    Log("Client request File List");
+                    
                     using (TcpClient serverClient = new TcpClient())
                     {
                         await serverClient.ConnectAsync(SERVER_HOST, SERVER_PORT);
@@ -95,9 +113,13 @@ namespace Cache
                         using (StreamWriter serverWriter = new StreamWriter(serverClient.GetStream(), Encoding.UTF8) { AutoFlush = true })
                         {
                             await serverWriter.WriteLineAsync("LIST_FILES");
+                            Log("Send LIST_FILES to Server");
                             string fileListJson = await serverReader.ReadLineAsync();
-
+                            deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, List<Tuple<int, int, int, string>>>>>(fileListJson);
+                            
+                            Log("Receive FIle_List from Server");
                             await writer.WriteLineAsync(fileListJson);
+                            Log("File_List send to Client");
                         }
                     }
                 }
@@ -105,6 +127,21 @@ namespace Cache
                 {
                     await writer.WriteLineAsync("INVALID_REQUEST");
                 }
+            }
+        }
+        private void Log(string message)
+        {
+            string logFilePath = "log.txt";
+            lblCacheStatus.Text = message;
+            // Check if the log file exists and delete it before creating a new one
+            if (File.Exists(logFilePath))
+            {
+                File.Delete(logFilePath);
+            }
+
+            using (StreamWriter sw = new StreamWriter(logFilePath, true))
+            {
+                sw.WriteLine($"{DateTime.Now}: {message}");
             }
         }
     }
