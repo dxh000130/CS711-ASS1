@@ -1,17 +1,12 @@
-2023/3/20 13:34:35: Log file exists and delete it
-2023/3/20 13:34:57: Listening on 127.0.0.1:8080
-2023/3/20 13:35:00: LIST_FILES
-2023/3/20 13:35:00: Client request File List
-2023/3/20 13:35:00: Send LIST_FILES to Server
-2023/3/20 13:35:01: Receive FIle_List from Server
-2023/3/20 13:35:01: File_List send to Client
-2023/3/20 13:35:03: GET_FILE test1.bmp
-2023/3/20 13:35:03: Client Request Download File: test1.bmp
-2023/3/20 13:35:03: Find File Name in File List!
-2023/3/20 13:35:05: response: 0% of file test1.bmp was constructed with the cached data. 1153 file chunks need to be downloaded from the server.
-2023/3/20 13:35:05: Send back to Client.
-2023/3/20 13:35:08: GET_FILE test2.bmp
-2023/3/20 13:35:08: Client Request Download File: test2.bmp
-2023/3/20 13:35:08: Find File Name in File List!
-2023/3/20 13:35:08: response: 99.7398091934085% of file test2.bmp was constructed with the cached data. 3 file chunks need to be downloaded from the server.
-2023/3/20 13:35:08: Send back to Client.
+2023/3/20 14:11:10: Log file exists and delete it
+2023/3/20 14:11:19: Listening on 127.0.0.1:8080
+2023/3/20 14:11:23: LIST_FILES
+2023/3/20 14:11:23: Client request File List
+2023/3/20 14:11:23: Send LIST_FILES to Server
+2023/3/20 14:11:24: Receive FIle_List from Server
+2023/3/20 14:11:24: File_List send to Client
+2023/3/20 14:11:25: GET_FILE test1.bmp
+2023/3/20 14:11:25: Client Request Download File: test1.bmp
+2023/3/20 14:11:25: Find File Name in File List!
+2023/3/20 14:11:26: response: 0% of file test1.bmp was constructed with the cached data. 1153 file chunks need to be downloaded from the server.
+2023/3/20 14:11:26: Send back to Client.

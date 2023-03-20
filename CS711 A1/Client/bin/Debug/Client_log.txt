@@ -1,18 +1,12 @@
-2023/3/20 13:34:46: Log file exists and delete it
-2023/3/20 13:35:00: Refresh File List
-2023/3/20 13:35:00: Connecting....
-2023/3/20 13:35:00: Connected
-2023/3/20 13:35:00: Sent Request! Please Wait For response
-2023/3/20 13:35:01: Reply received!
-2023/3/20 13:35:03: Select test1.bmp
-2023/3/20 13:35:03: Connecting....
-2023/3/20 13:35:03: Connected
-2023/3/20 13:35:03: Send download file command to cache, Please Wait For response
-2023/3/20 13:35:05: Received response from cache!
-2023/3/20 13:35:05: The file has been successfully merged and saved.
-2023/3/20 13:35:08: Select test2.bmp
-2023/3/20 13:35:08: Connecting....
-2023/3/20 13:35:08: Connected
-2023/3/20 13:35:08: Send download file command to cache, Please Wait For response
-2023/3/20 13:35:08: Received response from cache!
-2023/3/20 13:35:08: The file has been successfully merged and saved.
+2023/3/20 14:11:16: Log file exists and delete it
+2023/3/20 14:11:23: Refresh File List
+2023/3/20 14:11:23: Connecting....
+2023/3/20 14:11:23: Connected
+2023/3/20 14:11:23: Sent Request! Please Wait For response
+2023/3/20 14:11:24: Reply received!
+2023/3/20 14:11:25: Select test1.bmp
+2023/3/20 14:11:25: Connecting....
+2023/3/20 14:11:25: Connected
+2023/3/20 14:11:25: Send download file command to cache, Please Wait For response
+2023/3/20 14:11:26: Received response from cache!
+2023/3/20 14:11:27: The file has been successfully merged and saved.

@@ -154,6 +154,7 @@ namespace Client
                     using (MemoryStream stream = new MemoryStream(completeFileBytes))
                     {
                         pictureBoxPreview.Image = Image.FromStream(stream);
+                        pictureBoxPreview.Text = fileName;
                         pictureBoxPreview.SizeMode = PictureBoxSizeMode.StretchImage;
                     }
                 }
@@ -186,6 +187,10 @@ namespace Client
         private void Open_DLog_f(object sender, EventArgs eventArgs)
         {
             System.Diagnostics.Process.Start("explorer.exe", "/select," + "Client_detailed_log.txt");
+        }
+        private void Open_Download_file(object sender, EventArgs eventArgs)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + pictureBoxPreview.Text);
         }
     }
     

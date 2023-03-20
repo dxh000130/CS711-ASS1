@@ -75,6 +75,7 @@
             this.pictureBoxPreview.Size = new System.Drawing.Size(776, 192);
             this.pictureBoxPreview.TabIndex = 3;
             this.pictureBoxPreview.TabStop = false;
+            this.pictureBoxPreview.Click += new System.EventHandler(this.Open_Download_file);
             // 
             // label1
             // 
