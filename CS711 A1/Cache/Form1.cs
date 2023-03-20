@@ -117,7 +117,7 @@ namespace Cache
                                 }
 
                                 Log("response: " + (double)Number_of_file_blocks_that_exist/Total_number_of_file_blocks*100 + "% of file " + fileName +
-                                    " was constructed with the cached data");
+                                    " was constructed with the cached data. " + (Total_number_of_file_blocks-Number_of_file_blocks_that_exist).ToString() + " file chunks need to be downloaded from the server.");
                                 string jsonString = JsonConvert.SerializeObject(File_BLock_hexadecimal);
                                 await writer.WriteLineAsync(jsonString);
                                 Log("Send back to Client.");

@@ -101,7 +101,7 @@
             this.Controls.Add(this.startButton);
             this.Controls.Add(this.btnAddFile);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Server";
             this.ResumeLayout(false);
         }
 

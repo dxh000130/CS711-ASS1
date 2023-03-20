@@ -117,7 +117,7 @@
             this.Controls.Add(this.buttonRefreshList);
             this.Controls.Add(this.listBoxFiles);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Client";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.ResumeLayout(false);
         }

@@ -113,7 +113,7 @@
             this.Controls.Add(this.lblCacheStatus);
             this.Controls.Add(this.btnStart);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Cache Server";
             this.ResumeLayout(false);
         }
 
