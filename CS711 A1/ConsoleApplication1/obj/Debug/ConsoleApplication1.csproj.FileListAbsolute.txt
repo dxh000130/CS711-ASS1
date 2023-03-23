@@ -1,0 +1,7 @@
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.AssemblyReference.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.SuggestedBindingRedirects.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\obj\Debug\ConsoleApplication1.csproj.CoreCompileInputs.cache
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
