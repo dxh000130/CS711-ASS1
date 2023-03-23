@@ -16,14 +16,19 @@ namespace ConsoleApplication1
             int blockSize = 2048;
             int minBlockSize = 1024;
             int maxBlockSize = 4096;
-            ulong splitMarker = 97; // 这是一个示例分割标记，你可以根据需要调整
+            ulong splitMarker = 2048; // 这是一个示例分割标记，你可以根据需要调整
             string file1Path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "File_Storage", "test3.bmp"));
             string file2Path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "File_Storage", "test1.bmp"));
 
-            List<Tuple<ulong, int>> file1HashesAndSizes = ComputeFileBlockHashes(file1Path, blockSize, minBlockSize, maxBlockSize, splitMarker);
-            List<Tuple<ulong, int>> file2HashesAndSizes = ComputeFileBlockHashes(file2Path, blockSize, minBlockSize, maxBlockSize, splitMarker);
+            // List<Tuple<ulong, int>> file1HashesAndSizes = ComputeFileBlockHashes(file1Path, blockSize, minBlockSize, maxBlockSize, splitMarker);
+            // List<Tuple<ulong, int>> file2HashesAndSizes = ComputeFileBlockHashes(file2Path, blockSize, minBlockSize, maxBlockSize, splitMarker);
+            //
+            // List<int> blocksToRedownload = GetBlocksToRedownload(file1Hashes, file2Hashes);
+            List<ulong> file1Hashes = ComputeFileBlockHashes(file1Path, blockSize);
+            List<ulong> file2Hashes = ComputeFileBlockHashes(file2Path, blockSize);
 
-            List<int> blocksToRedownload = GetBlocksToRedownload(file1HashesAndSizes.Select(x => x.Item1).ToList(), file2HashesAndSizes.Select(x => x.Item1).ToList());
+            List<int> blocksToRedownload = GetBlocksToRedownload(file1Hashes, file2Hashes);
+
 
             Console.WriteLine("需要重新下载的文件块索引：");
             Console.WriteLine(blocksToRedownload.Count);
@@ -31,6 +36,26 @@ namespace ConsoleApplication1
             // {
             //     Console.WriteLine(index);
             // }
+        }
+        public static List<ulong> ComputeFileBlockHashes(string filePath, int blockSize)
+        {
+            byte[] bytes = File.ReadAllBytes(filePath);
+            List<ulong> hashes = new List<ulong>();
+
+            RabinKarpHash hasher = new RabinKarpHash(blockSize);
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                hasher.Add(bytes[i]);
+
+                if (i >= blockSize - 1)
+                {
+                    hashes.Add(hasher.Hash);
+                    hasher.Remove(bytes[i - blockSize + 1]);
+                }
+            }
+
+            return hashes;
         }
         public static List<int> GetBlocksToRedownload(List<ulong> hashes1, List<ulong> hashes2)
         {
