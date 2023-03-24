@@ -20,6 +20,20 @@ namespace Server
         {
             InitializeComponent();
             server = new Server();
+            if (!Directory.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log"))))
+            {
+                Directory.CreateDirectory(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log")));
+            }
+            if (File.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_detailed_log.txt"))))
+            {
+                File.Delete(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_detailed_log.txt")));
+                
+            }
+            if (File.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_log.txt"))))
+            {
+                File.Delete(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_log.txt")));
+                Log("Log file exists and delete it");
+            }
             LoadFileList();
             server.OutputCallback = UpdateIPLable;
             server.StatusLabelCallback = UpdateStatusLable;
@@ -29,16 +43,7 @@ namespace Server
             Log("Not Start listening: " + IPAddress.Parse(Server.SERVER_HOST) + ":" +
                        Server.SERVER_PORT.ToString());
             // Check if the log file exists and delete it
-            if (File.Exists("Server_detailed_log.txt"))
-            {
-                File.Delete("Server_detailed_log.txt");
-                
-            }
-            if (File.Exists("Server_log.txt"))
-            {
-                File.Delete("Server_log.txt");
-                Log("Log file exists and delete it");
-            }
+            
         }
         private void LoadFileList()
         {
@@ -125,7 +130,7 @@ namespace Server
 
         private static void Log(string message)
         {
-            string logFilePath = "Server_log.txt";
+            string logFilePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_log.txt"));
             Log_Detail(message);
         
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
@@ -136,7 +141,7 @@ namespace Server
 
         private static void Log_Detail(string message)
         {
-            string logFilePath = "Server_detailed_log.txt";
+            string logFilePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_detailed_log.txt"));
         
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {

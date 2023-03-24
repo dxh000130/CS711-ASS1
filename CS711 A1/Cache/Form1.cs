@@ -33,16 +33,19 @@ namespace Cache
             _cache = new Dictionary<string, string>();
             Server_IP_label.Text = SERVER_HOST + ":" + SERVER_PORT;
             Client_IP_label.Text = CACHE_SERVER_HOST + ":" + CACHE_SERVER_PORT;
-
-            // Check if the log file exists and delete it
-            if (File.Exists("Cache_log.txt"))
+            if (!Directory.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log"))))
             {
-                File.Delete("Cache_log.txt");
+                Directory.CreateDirectory(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log")));
+            }
+            // Check if the log file exists and delete it
+            if (File.Exists("./Log/Cache_log.txt"))
+            {
+                File.Delete("./Log/Cache_log.txt");
                 Log("Log file exists and delete it");
             }
-            if (File.Exists("Cache_detailed_log.txt"))
+            if (File.Exists("./Log/Cache_detailed_log.txt"))
             {
-                File.Delete("Cache_detailed_log.txt");
+                File.Delete("./Log/Cache_detailed_log.txt");
             }
         }
         private void buttonStart_Click(object sender, EventArgs e)
@@ -195,7 +198,7 @@ namespace Cache
         }
         private void Log(string message)
         {
-            string logFilePath = "Cache_log.txt";
+            string logFilePath = "./Log/Cache_log.txt";
             lblCacheStatus.Text = message;
             Log_Detail(message);
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
@@ -205,7 +208,7 @@ namespace Cache
         }
         private void Log_Detail(string message)
         {
-            string logFilePath = "Cache_detailed_log.txt";
+            string logFilePath = "./Log/Cache_detailed_log.txt";
 
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {
@@ -220,11 +223,11 @@ namespace Cache
 
         private void Open_Log_f(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + "Cache_log.txt");
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Cache_log.txt")));
         }
         private void Open_DLog_f(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + "Cache_detailed_log.txt");
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Cache_detailed_log.txt")));
         }
     }
 }

@@ -1,1 +1,0 @@
-2023/3/24 14:28:44: Log file exists and delete it
