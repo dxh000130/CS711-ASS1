@@ -12,3 +12,5 @@ C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Newtonsoft.J
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\bin\Debug\Newtonsoft.Json.xml
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.Form1.resources
 C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.csproj.CopyComplete
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.Cached_File_List.resources
+C:\Users\dxh00\Documents\GitHub\CS711-ASS1\CS711 A1\Cache\obj\Debug\Cache.Cached_File_Block_List.resources

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -21,9 +22,10 @@ namespace Cache
         private List<Dictionary<string, List<Tuple<int, int, int, string>>>> deserializedListOfDictionaries;
         private const int SERVER_PORT = 8081;
         private const string SERVER_HOST = "127.0.0.1";
-
         private TcpListener _listener;
         private Dictionary<string, string> _cache;
+        Cached_File_List newForm = new Cached_File_List();
+        Cached_File_Block_List newForm2 = new Cached_File_Block_List();
         
         public Form1()
         {
@@ -31,7 +33,7 @@ namespace Cache
             _cache = new Dictionary<string, string>();
             Server_IP_label.Text = SERVER_HOST + ":" + SERVER_PORT;
             Client_IP_label.Text = CACHE_SERVER_HOST + ":" + CACHE_SERVER_PORT;
-            
+
             // Check if the log file exists and delete it
             if (File.Exists("Cache_log.txt"))
             {
@@ -59,7 +61,27 @@ namespace Cache
                 }
             });
         }
+        private void button_Cached_File_list_Click(object sender, EventArgs e)
+        {
+            
 
+            // Display Cached_File_List
+            newForm.Show();
+
+        }
+        private void button_Cached_FileBlock_list_Click(object sender, EventArgs e)
+        {
+            
+
+            // Display Cached_File_List
+            newForm2.Show();
+
+            // 添加所有文件
+            foreach (KeyValuePair<string, string> file_ in _cache)
+            {
+                newForm2.listBox1.Items.Add(file_.Key + " : " + file_.Value);
+            }
+        }
         private async Task ProcessRequestAsync(TcpClient client)
         {
             using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
@@ -109,6 +131,7 @@ namespace Cache
                                                 string fileFragmenthexadecimal = await serverReader.ReadLineAsync();
                                                 Log_Detail("Server reply: " + fileFragmenthexadecimal);
                                                 _cache[file_block_hash] = fileFragmenthexadecimal;
+                                                newForm2.listBox1.Items.Add(file_block_hash + " : " + fileFragmenthexadecimal);
                                                 Log_Detail("Add " + fileFragmenthexadecimal);
                                                 File_BLock_hexadecimal.Add(fileFragmenthexadecimal);
                                             }
@@ -120,6 +143,8 @@ namespace Cache
                                     " was constructed with the cached data. " + (Total_number_of_file_blocks-Number_of_file_blocks_that_exist).ToString() + " file chunks need to be downloaded from the server.");
                                 string jsonString = JsonConvert.SerializeObject(File_BLock_hexadecimal);
                                 await writer.WriteLineAsync(jsonString);
+
+                                newForm.listBox1.Items.Add(fileName);
                                 Log("Send back to Client.");
                             }
                             

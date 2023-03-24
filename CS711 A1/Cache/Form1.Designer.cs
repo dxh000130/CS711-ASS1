@@ -36,6 +36,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.Open_Log = new System.Windows.Forms.Button();
             this.Open_Detail = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnStart
@@ -100,11 +102,34 @@
             this.Open_Detail.UseVisualStyleBackColor = true;
             this.Open_Detail.Click += new System.EventHandler(this.Open_DLog_f);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(665, 300);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(120, 45);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "Cached File List";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button_Cached_File_list_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(662, 370);
+            this.button3.Name = "button3";
+            this.button3.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.button3.Size = new System.Drawing.Size(124, 53);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "Cached File Block List";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button_Cached_FileBlock_list_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.Open_Detail);
             this.Controls.Add(this.Open_Log);
             this.Controls.Add(this.button1);
@@ -116,6 +141,9 @@
             this.Text = "Cache Server";
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
 
         private System.Windows.Forms.Button Open_Log;
         private System.Windows.Forms.Button Open_Detail;

@@ -151,24 +151,36 @@ namespace Client
                     {
                         Log("File Changed");
                         // Request the list of files from the cache server
-                        await writer.WriteLineAsync("LIST_FILES");
-                        await writer.FlushAsync();
-                        Log("Sent Request! Please Wait For response");
-                        // Read the file list from the cache server
-                        string fileList = await reader.ReadLineAsync();
-                        // Convert to List<Dictionary<string, List<Tuple<int, int, int, string>>>> from json
-                        List<Dictionary<string, List<Tuple<int, int, int, string>>>> deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, List<Tuple<int, int, int, string>>>>>(fileList);
-                        Log("Reply received!");
-                        // Update the ListBox with the list of files
-                        listBoxFiles.Items.Clear();
-                        foreach (var dictionary in deserializedListOfDictionaries)
+                        Log("Refresh File List");
+                        Log("Connecting....");
+                        using (TcpClient client1 = new TcpClient())
                         {
-                            foreach (var entry in dictionary)
+                            await client1.ConnectAsync(CACHE_SERVER_HOST, CACHE_SERVER_PORT);
+                            Log("Connected");
+                            using (StreamReader reader1 = new StreamReader(client1.GetStream(), Encoding.UTF8))
+                            using (StreamWriter writer1 = new StreamWriter(client1.GetStream(), Encoding.UTF8))
                             {
-                                listBoxFiles.Items.Add(entry.Key);
+                                // Request the list of files from the cache server
+                                await writer1.WriteLineAsync("LIST_FILES");
+                                await writer1.FlushAsync();
+                                Log("Sent Request! Please Wait For response");
+                                // Read the file list from the cache server
+                                string fileList = await reader1.ReadLineAsync();
+                                // Convert to List<Dictionary<string, List<Tuple<int, int, int, string>>>> from json
+                                List<Dictionary<string, List<Tuple<int, int, int, string>>>> deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, List<Tuple<int, int, int, string>>>>>(fileList);
+                                Log("Reply received!");
+                                // Update the ListBox with the list of files
+                                listBoxFiles.Items.Clear();
+                                foreach (var dictionary in deserializedListOfDictionaries)
+                                {
+                                    foreach (var entry in dictionary)
+                                    {
+                                        listBoxFiles.Items.Add(entry.Key);
+                                    }
+                                }
+                                Log_Detail(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
                             }
                         }
-                        Log_Detail(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
                         FileVailed = true;
                     }
                 }

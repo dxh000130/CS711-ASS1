@@ -40,7 +40,7 @@ namespace Server
 
     private async Task ProcessRequestAsync(TcpClient client)
     {
-
+        
         using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
         using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8) { AutoFlush = true })
         {
@@ -69,10 +69,26 @@ namespace Server
                 Log_Detail("hexadecimal: "+BitConverter.ToString(fileFragment).Replace("-", ""));
                 await writer.WriteLineAsync(BitConverter.ToString(fileFragment).Replace("-", ""));
             }
+            else if (request.StartsWith("Vaild_File_Change"))
+            {
+                string[] requestParts = request.Split(' ');
+                string fileName = requestParts[1];
+                string File = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "File_Storage", fileName));
+                var SingleFileHash = ComputeFileHash(File);
+                if (FileHash[fileName] == SingleFileHash)
+                {
+                    await writer.WriteLineAsync("true");
+                }
+                else
+                {
+                    await writer.WriteLineAsync("false");
+                }
+            }
 
+            
             await writer.FlushAsync();
         }
-
+        
         client.Close();
     }
 
@@ -94,7 +110,7 @@ namespace Server
         List<Dictionary<string, List<Tuple<int, int, int, string>>>> listOfDictionaries = new List<Dictionary<string, List<Tuple<int, int, int, string>>>>();
         for (int i = 0; i < files.Length; i++)
         {
-            FileHash[files[i]]
+            FileHash[Path.GetFileName(files[i])] = ComputeFileHash(files[i]);
             StatusLabelCallback?.Invoke(files[i]);
             var blockHashes = GetFileBlockHashes(files[i], blockSize);
 
@@ -190,6 +206,17 @@ namespace Server
         {
             byte[] hashBytes = sha256.ComputeHash(data);
             return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+        }
+    }
+    private static string ComputeFileHash(string filePath)
+    {
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            using (FileStream stream = File.OpenRead(filePath))
+            {
+                byte[] hashBytes = sha256.ComputeHash(stream);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
         }
     }
     private async Task<byte[]> ServeFileFragmentAsync(string fileName, int startByte, int fragmentSize)

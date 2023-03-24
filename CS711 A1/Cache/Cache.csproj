@@ -49,6 +49,18 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Cached_File_Block_List.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Cached_File_Block_List.Designer.cs">
+          <DependentUpon>Cached_File_Block_List.cs</DependentUpon>
+        </Compile>
+        <Compile Include="Cached_File_List.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Cached_File_List.Designer.cs">
+          <DependentUpon>Cached_File_List.cs</DependentUpon>
+        </Compile>
         <Compile Include="Form1.cs">
             <SubType>Form</SubType>
         </Compile>
@@ -57,6 +69,12 @@
         </Compile>
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <EmbeddedResource Include="Cached_File_Block_List.resx">
+          <DependentUpon>Cached_File_Block_List.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Cached_File_List.resx">
+          <DependentUpon>Cached_File_List.cs</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Include="Form1.resx">
           <DependentUpon>Form1.cs</DependentUpon>
         </EmbeddedResource>

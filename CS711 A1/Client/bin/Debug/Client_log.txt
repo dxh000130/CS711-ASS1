@@ -1,12 +1,92 @@
-2023/3/20 14:11:16: Log file exists and delete it
-2023/3/20 14:11:23: Refresh File List
-2023/3/20 14:11:23: Connecting....
-2023/3/20 14:11:23: Connected
-2023/3/20 14:11:23: Sent Request! Please Wait For response
-2023/3/20 14:11:24: Reply received!
-2023/3/20 14:11:25: Select test1.bmp
-2023/3/20 14:11:25: Connecting....
-2023/3/20 14:11:25: Connected
-2023/3/20 14:11:25: Send download file command to cache, Please Wait For response
-2023/3/20 14:11:26: Received response from cache!
-2023/3/20 14:11:27: The file has been successfully merged and saved.
+2023/3/24 13:56:24: Log file exists and delete it
+2023/3/24 13:56:38: Refresh File List
+2023/3/24 13:56:38: Connecting....
+2023/3/24 13:56:38: Connected
+2023/3/24 13:56:38: Sent Request! Please Wait For response
+2023/3/24 13:56:39: Reply received!
+2023/3/24 13:56:42: Connecting....
+2023/3/24 13:56:42: Connected
+2023/3/24 13:56:42: Send check file command to cache, Please Wait For response
+2023/3/24 13:56:42: Received response from cache!
+2023/3/24 13:56:42: File Doesn't not change.
+2023/3/24 13:56:42: Select test1.bmp
+2023/3/24 13:56:42: Connecting....
+2023/3/24 13:56:42: Connected
+2023/3/24 13:56:42: Send download file command to cache, Please Wait For response
+2023/3/24 13:56:44: Received response from cache!
+2023/3/24 13:56:44: The file has been successfully merged and saved.
+2023/3/24 13:57:03: Connecting....
+2023/3/24 13:57:03: Connected
+2023/3/24 13:57:03: Send check file command to cache, Please Wait For response
+2023/3/24 13:57:03: Received response from cache!
+2023/3/24 13:57:03: File Changed
+2023/3/24 13:57:03: Refresh File List
+2023/3/24 13:57:03: Connecting....
+2023/3/24 13:57:03: Connected
+2023/3/24 13:57:03: Sent Request! Please Wait For response
+2023/3/24 13:57:04: Reply received!
+2023/3/24 13:57:04: Select test1.bmp
+2023/3/24 13:57:04: Connecting....
+2023/3/24 13:57:04: Connected
+2023/3/24 13:57:04: Send download file command to cache, Please Wait For response
+2023/3/24 13:57:04: Received response from cache!
+2023/3/24 13:57:04: The file has been successfully merged and saved.
+2023/3/24 14:15:21: Refresh File List
+2023/3/24 14:15:21: Connecting....
+2023/3/24 14:15:21: Connected
+2023/3/24 14:15:21: Sent Request! Please Wait For response
+2023/3/24 14:15:21: Reply received!
+2023/3/24 14:15:24: Connecting....
+2023/3/24 14:15:24: Connected
+2023/3/24 14:15:24: Send check file command to cache, Please Wait For response
+2023/3/24 14:15:24: Received response from cache!
+2023/3/24 14:15:24: File Doesn't not change.
+2023/3/24 14:15:24: Select test1.bmp
+2023/3/24 14:15:24: Connecting....
+2023/3/24 14:15:24: Connected
+2023/3/24 14:15:24: Send download file command to cache, Please Wait For response
+2023/3/24 14:15:26: Received response from cache!
+2023/3/24 14:15:26: The file has been successfully merged and saved.
+2023/3/24 14:16:55: Refresh File List
+2023/3/24 14:16:55: Connecting....
+2023/3/24 14:16:55: Connected
+2023/3/24 14:16:55: Sent Request! Please Wait For response
+2023/3/24 14:16:56: Reply received!
+2023/3/24 14:17:00: Connecting....
+2023/3/24 14:17:00: Connected
+2023/3/24 14:17:00: Send check file command to cache, Please Wait For response
+2023/3/24 14:17:00: Received response from cache!
+2023/3/24 14:17:00: File Doesn't not change.
+2023/3/24 14:17:00: Select test1.bmp
+2023/3/24 14:17:00: Connecting....
+2023/3/24 14:17:00: Connected
+2023/3/24 14:17:00: Send download file command to cache, Please Wait For response
+2023/3/24 14:17:01: Received response from cache!
+2023/3/24 14:17:02: The file has been successfully merged and saved.
+2023/3/24 14:17:08: Connecting....
+2023/3/24 14:17:08: Connected
+2023/3/24 14:17:08: Send check file command to cache, Please Wait For response
+2023/3/24 14:17:08: Received response from cache!
+2023/3/24 14:17:08: File Doesn't not change.
+2023/3/24 14:17:08: Select test3.bmp
+2023/3/24 14:17:08: Connecting....
+2023/3/24 14:17:08: Connected
+2023/3/24 14:17:08: Send download file command to cache, Please Wait For response
+2023/3/24 14:17:09: Received response from cache!
+2023/3/24 14:17:09: The file has been successfully merged and saved.
+2023/3/24 14:25:38: Refresh File List
+2023/3/24 14:25:38: Connecting....
+2023/3/24 14:25:38: Connected
+2023/3/24 14:25:38: Sent Request! Please Wait For response
+2023/3/24 14:25:38: Reply received!
+2023/3/24 14:25:40: Connecting....
+2023/3/24 14:25:40: Connected
+2023/3/24 14:25:40: Send check file command to cache, Please Wait For response
+2023/3/24 14:25:40: Received response from cache!
+2023/3/24 14:25:40: File Doesn't not change.
+2023/3/24 14:25:40: Select test1.bmp
+2023/3/24 14:25:40: Connecting....
+2023/3/24 14:25:40: Connected
+2023/3/24 14:25:40: Send download file command to cache, Please Wait For response
+2023/3/24 14:25:42: Received response from cache!
+2023/3/24 14:25:42: The file has been successfully merged and saved.
