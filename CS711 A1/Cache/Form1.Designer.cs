@@ -110,6 +110,7 @@
             this.button2.TabIndex = 9;
             this.button2.Text = "Cached File List";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button_Cached_File_list_Click);
             // 
             // button3
             // 
@@ -120,6 +121,7 @@
             this.button3.TabIndex = 10;
             this.button3.Text = "Cached File Block List";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button_Cached_FileBlock_list_Click);
             // 
             // Form1
             // 

@@ -33,9 +33,9 @@ namespace Cache
             _cache = new Dictionary<string, string>();
             Server_IP_label.Text = SERVER_HOST + ":" + SERVER_PORT;
             Client_IP_label.Text = CACHE_SERVER_HOST + ":" + CACHE_SERVER_PORT;
-            if (!Directory.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log"))))
+            if (!Directory.Exists("./Log"))
             {
-                Directory.CreateDirectory(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log")));
+                Directory.CreateDirectory("./Log");
             }
             // Check if the log file exists and delete it
             if (File.Exists("./Log/Cache_log.txt"))
@@ -223,11 +223,11 @@ namespace Cache
 
         private void Open_Log_f(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Cache_log.txt")));
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Environment.CurrentDirectory+"/Log/Cache_log.txt"));
         }
         private void Open_DLog_f(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Cache_detailed_log.txt")));
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Environment.CurrentDirectory+"/Log/Cache_detailed_log.txt"));
         }
     }
 }

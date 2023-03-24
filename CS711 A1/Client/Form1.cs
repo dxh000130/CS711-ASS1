@@ -21,13 +21,13 @@ namespace Client
         {
             InitializeComponent();
             // Check if the log file exists and delete it
-            if (!Directory.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log"))))
+            if (!Directory.Exists("./Log"))
             {
-                Directory.CreateDirectory(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log")));
+                Directory.CreateDirectory("./Log");
             }
-            if (!Directory.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads"))))
+            if (!Directory.Exists("./Downloads"))
             {
-                Directory.CreateDirectory(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads")));
+                Directory.CreateDirectory("./Downloads");
             }
             if (File.Exists("./Log/Client_detailed_log.txt"))
             {
@@ -213,7 +213,7 @@ namespace Client
                     byte[] completeFileBytes = CombinehexadecimalList(resultList);
 
                     // Write the entire byte[] to a file.
-                    string outputFilePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads", fileName)); // Output file
+                    string outputFilePath = Path.GetFullPath( "./Downloads/"+ fileName); // Output file
                     File.WriteAllBytes(outputFilePath, completeFileBytes);
                     Log("The file has been successfully merged and saved.");
 
@@ -249,15 +249,15 @@ namespace Client
         }
         private void Open_Log_f(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Client_log.txt")));
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Environment.CurrentDirectory+"/Log/Client_log.txt"));
         }
         private void Open_DLog_f(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Client_detailed_log.txt")));
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Environment.CurrentDirectory+"/Log/Client_detailed_log.txt"));
         }
         private void Open_Download_file(object sender, EventArgs eventArgs)
         {
-            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Downloads", pictureBoxPreview.Text)));
+            System.Diagnostics.Process.Start("explorer.exe", "/select," + Path.GetFullPath(Environment.CurrentDirectory+"/Downloads/"+pictureBoxPreview.Text));
         }
     }
     

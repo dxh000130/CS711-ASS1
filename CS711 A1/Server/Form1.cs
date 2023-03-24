@@ -20,18 +20,18 @@ namespace Server
         {
             InitializeComponent();
             server = new Server();
-            if (!Directory.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log"))))
+            if (!Directory.Exists("./Log"))
             {
-                Directory.CreateDirectory(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log")));
+                Directory.CreateDirectory("./Log");
             }
-            if (File.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_detailed_log.txt"))))
+            if (File.Exists("./Log/Server_log.txt"))
             {
-                File.Delete(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_detailed_log.txt")));
+                File.Delete("./Log/Server_log.txt");
                 
             }
-            if (File.Exists(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_log.txt"))))
+            if (File.Exists("./Log/Server_log.txt"))
             {
-                File.Delete(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_log.txt")));
+                File.Delete("./Log/Server_log.txt");
                 Log("Log file exists and delete it");
             }
             LoadFileList();
@@ -130,7 +130,7 @@ namespace Server
 
         private static void Log(string message)
         {
-            string logFilePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_log.txt"));
+            string logFilePath = "./Log/Server_log.txt";
             Log_Detail(message);
         
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
@@ -141,7 +141,7 @@ namespace Server
 
         private static void Log_Detail(string message)
         {
-            string logFilePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "Server_detailed_log.txt"));
+            string logFilePath = "./Log/Server_log.txt";
         
             using (StreamWriter sw = new StreamWriter(logFilePath, true))
             {
