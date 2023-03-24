@@ -75,6 +75,7 @@
             // 
             // FilesListbox
             // 
+            this.FilesListbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.FilesListbox.FormattingEnabled = true;
             this.FilesListbox.ItemHeight = 18;
             this.FilesListbox.Location = new System.Drawing.Point(60, 91);
