@@ -146,6 +146,25 @@ namespace Cache
                             Log("File_List send to Client");
                         }
                     }
+                }else if (request.StartsWith("Vaild_File_Change"))
+                {
+                    Log("Client request Vaild File change or not");
+                    
+                    using (TcpClient serverClient = new TcpClient())
+                    {
+                        await serverClient.ConnectAsync(SERVER_HOST, SERVER_PORT);
+                        using (StreamReader serverReader = new StreamReader(serverClient.GetStream(), Encoding.UTF8))
+                        using (StreamWriter serverWriter = new StreamWriter(serverClient.GetStream(), Encoding.UTF8) { AutoFlush = true })
+                        {
+                            await serverWriter.WriteLineAsync(request);
+                            Log("Send Vaild_File_Change to Server");
+                            string fileListJson = await serverReader.ReadLineAsync();
+
+                            Log("Receive response from Server");
+                            await writer.WriteLineAsync(fileListJson);
+                            Log("Vaild_File_Change send to Client");
+                        }
+                    }
                 }
             }
         }

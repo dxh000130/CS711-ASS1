@@ -115,14 +115,64 @@ namespace Client
         }
         private async void buttonDownloadFile_Click(object sender, EventArgs e)
         {
+            var FileVailed = false;
             if (listBoxFiles.SelectedItem == null)
             {
                 MessageBox.Show("Please select a file from the list.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Log("Error : Please select a file from the list.");
                 return;
             }
-        
+            
             string fileName = listBoxFiles.SelectedItem.ToString();
+            using (TcpClient client = new TcpClient())
+            {
+                Log("Connecting....");
+                await client.ConnectAsync(CACHE_SERVER_HOST, CACHE_SERVER_PORT);
+                Log("Connected");
+                using (StreamReader reader = new StreamReader(client.GetStream(), Encoding.UTF8))
+                using (StreamWriter writer = new StreamWriter(client.GetStream(), Encoding.UTF8))
+                {
+                    // Request the file from the cache server
+                    await writer.WriteLineAsync($"Vaild_File_Change {fileName}");
+                    Log("Send check file command to cache, Please Wait For response");
+                    await writer.FlushAsync();
+        
+                    // Read the file content from the cache server
+                    string VaildFile = await reader.ReadLineAsync();
+                    Log("Received response from cache!");
+                    Log_Detail(VaildFile);
+                    // Convert from json to string list
+                    if (VaildFile == "true")
+                    {
+                        FileVailed = true;
+                        Log("File Doesn't not change.");
+                    }
+                    else if(VaildFile == "false")
+                    {
+                        Log("File Changed");
+                        // Request the list of files from the cache server
+                        await writer.WriteLineAsync("LIST_FILES");
+                        await writer.FlushAsync();
+                        Log("Sent Request! Please Wait For response");
+                        // Read the file list from the cache server
+                        string fileList = await reader.ReadLineAsync();
+                        // Convert to List<Dictionary<string, List<Tuple<int, int, int, string>>>> from json
+                        List<Dictionary<string, List<Tuple<int, int, int, string>>>> deserializedListOfDictionaries = JsonConvert.DeserializeObject<List<Dictionary<string, List<Tuple<int, int, int, string>>>>>(fileList);
+                        Log("Reply received!");
+                        // Update the ListBox with the list of files
+                        listBoxFiles.Items.Clear();
+                        foreach (var dictionary in deserializedListOfDictionaries)
+                        {
+                            foreach (var entry in dictionary)
+                            {
+                                listBoxFiles.Items.Add(entry.Key);
+                            }
+                        }
+                        Log_Detail(ConvertListOfDictionariesToString(deserializedListOfDictionaries));
+                        FileVailed = true;
+                    }
+                }
+            }
             Log("Select " + fileName);
             using (TcpClient client = new TcpClient())
             {

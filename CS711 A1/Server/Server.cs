@@ -15,11 +15,12 @@ namespace Server
     public const int SERVER_PORT = 8081;
     public const string SERVER_HOST = "127.0.0.1";
     private readonly TcpListener _listener;
+    private static Dictionary<string, string> FileHash; 
 
     public Server()
     {
         _listener = new TcpListener(IPAddress.Parse(SERVER_HOST), SERVER_PORT);
-        
+        FileHash = new Dictionary<string, string>();
     }
     public Action<string> OutputCallback { get; set; }
     public Action<string> StatusLabelCallback { get; set; }
@@ -93,6 +94,7 @@ namespace Server
         List<Dictionary<string, List<Tuple<int, int, int, string>>>> listOfDictionaries = new List<Dictionary<string, List<Tuple<int, int, int, string>>>>();
         for (int i = 0; i < files.Length; i++)
         {
+            FileHash[files[i]]
             StatusLabelCallback?.Invoke(files[i]);
             var blockHashes = GetFileBlockHashes(files[i], blockSize);
 
