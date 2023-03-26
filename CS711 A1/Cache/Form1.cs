@@ -24,6 +24,7 @@ namespace Cache
         private const string SERVER_HOST = "127.0.0.1";
         private TcpListener _listener;
         private Dictionary<string, string> _cache;
+        private List<string> CachedFile_list = new List<string>();
         Cached_File_List newForm = new Cached_File_List();
         Cached_File_Block_List newForm2 = new Cached_File_Block_List();
         
@@ -66,8 +67,11 @@ namespace Cache
         }
         private void button_Cached_File_list_Click(object sender, EventArgs e)
         {
-            
-
+            newForm = new Cached_File_List();
+            foreach (string file in CachedFile_list)
+            {
+                newForm.listBox1.Items.Add(file);
+            }
             // Display Cached_File_List
             newForm.Show();
 
@@ -75,7 +79,7 @@ namespace Cache
         private void button_Cached_FileBlock_list_Click(object sender, EventArgs e)
         {
             
-
+            newForm2 = new Cached_File_Block_List();
             // Display Cached_File_List
             newForm2.Show();
 
@@ -97,7 +101,6 @@ namespace Cache
                     string[] requestParts = request.Split(' ');
                     string fileName = requestParts[1];
                     Log("Client Request Download File: " + fileName);
-                    var fragmentSize = 2048;
                     foreach (var dict in deserializedListOfDictionaries)
                     {
                         foreach (var kv in dict)
@@ -129,7 +132,7 @@ namespace Cache
                                             using (StreamReader serverReader = new StreamReader(serverClient.GetStream(), Encoding.UTF8))
                                             using (StreamWriter serverWriter = new StreamWriter(serverClient.GetStream(), Encoding.UTF8) { AutoFlush = true })
                                             {
-                                                await serverWriter.WriteLineAsync($"GET_FILE_FRAGMENT {fileName} {tuple.Item2} {fragmentSize}");
+                                                await serverWriter.WriteLineAsync($"GET_FILE_FRAGMENT {fileName} {tuple.Item2} {tuple.Item3-tuple.Item2}");
                                                 Log_Detail("Send request To Server");
                                                 string fileFragmenthexadecimal = await serverReader.ReadLineAsync();
                                                 Log_Detail("Server reply: " + fileFragmenthexadecimal);
@@ -142,12 +145,17 @@ namespace Cache
                                     }
                                 }
 
+                                if (newForm.listBox1.Items.Count == 0)
+                                {
+                                    Total_number_of_file_blocks -= Number_of_file_blocks_that_exist;
+                                    Number_of_file_blocks_that_exist = 0;
+                                }
                                 Log("response: " + (double)Number_of_file_blocks_that_exist/Total_number_of_file_blocks*100 + "% of file " + fileName +
                                     " was constructed with the cached data. " + (Total_number_of_file_blocks-Number_of_file_blocks_that_exist).ToString() + " file chunks need to be downloaded from the server.");
                                 string jsonString = JsonConvert.SerializeObject(File_BLock_hexadecimal);
                                 await writer.WriteLineAsync(jsonString);
 
-                                newForm.listBox1.Items.Add(fileName);
+                                CachedFile_list.Add(fileName);
                                 Log("Send back to Client.");
                             }
                             
@@ -218,6 +226,7 @@ namespace Cache
         private void Clear_Button(object sender, EventArgs eventArgs)
         {
             _cache = new Dictionary<string, string>();
+            CachedFile_list.Clear();
             Log("Clear Cache!");
         }
 

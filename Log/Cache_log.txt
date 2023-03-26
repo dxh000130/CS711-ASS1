@@ -1,37 +1,17 @@
-2023/3/24 15:22:27: Log file exists and delete it
-2023/3/24 15:22:34: Listening on 127.0.0.1:8080
-2023/3/24 15:22:35: LIST_FILES
-2023/3/24 15:22:35: Client request File List
-2023/3/24 15:22:35: Send LIST_FILES to Server
-2023/3/24 15:22:35: Receive FIle_List from Server
-2023/3/24 15:22:35: File_List send to Client
-2023/3/24 15:22:38: Vaild_File_Change test1.bmp
-2023/3/24 15:22:38: Client request Vaild File change or not
-2023/3/24 15:22:38: Send Vaild_File_Change to Server
-2023/3/24 15:22:38: Receive response from Server
-2023/3/24 15:22:38: Vaild_File_Change send to Client
-2023/3/24 15:22:38: GET_FILE test1.bmp
-2023/3/24 15:22:38: Client Request Download File: test1.bmp
-2023/3/24 15:22:38: Find File Name in File List!
-2023/3/24 15:22:40: response: 0% of file test1.bmp was constructed with the cached data. 1153 file chunks need to be downloaded from the server.
-2023/3/24 15:22:40: Send back to Client.
-2023/3/24 15:22:41: Vaild_File_Change test2.bmp
-2023/3/24 15:22:41: Client request Vaild File change or not
-2023/3/24 15:22:41: Send Vaild_File_Change to Server
-2023/3/24 15:22:41: Receive response from Server
-2023/3/24 15:22:41: Vaild_File_Change send to Client
-2023/3/24 15:22:41: GET_FILE test2.bmp
-2023/3/24 15:22:41: Client Request Download File: test2.bmp
-2023/3/24 15:22:41: Find File Name in File List!
-2023/3/24 15:22:41: response: 99.7398091934085% of file test2.bmp was constructed with the cached data. 3 file chunks need to be downloaded from the server.
-2023/3/24 15:22:41: Send back to Client.
-2023/3/24 15:22:43: Vaild_File_Change test3.bmp
-2023/3/24 15:22:43: Client request Vaild File change or not
-2023/3/24 15:22:43: Send Vaild_File_Change to Server
-2023/3/24 15:22:43: Receive response from Server
-2023/3/24 15:22:43: Vaild_File_Change send to Client
-2023/3/24 15:22:43: GET_FILE test3.bmp
-2023/3/24 15:22:43: Client Request Download File: test3.bmp
-2023/3/24 15:22:43: Find File Name in File List!
-2023/3/24 15:22:44: response: 49.9566348655681% of file test3.bmp was constructed with the cached data. 577 file chunks need to be downloaded from the server.
-2023/3/24 15:22:44: Send back to Client.
+2023/3/26 20:48:45: Log file exists and delete it
+2023/3/26 20:48:59: Listening on 127.0.0.1:8080
+2023/3/26 20:49:02: LIST_FILES
+2023/3/26 20:49:02: Client request File List
+2023/3/26 20:49:02: Send LIST_FILES to Server
+2023/3/26 20:49:02: Receive FIle_List from Server
+2023/3/26 20:49:02: File_List send to Client
+2023/3/26 20:49:04: Vaild_File_Change test1.bmp
+2023/3/26 20:49:04: Client request Vaild File change or not
+2023/3/26 20:49:04: Send Vaild_File_Change to Server
+2023/3/26 20:49:04: Receive response from Server
+2023/3/26 20:49:04: Vaild_File_Change send to Client
+2023/3/26 20:49:04: GET_FILE test1.bmp
+2023/3/26 20:49:04: Client Request Download File: test1.bmp
+2023/3/26 20:49:04: Find File Name in File List!
+2023/3/26 20:49:07: response: 0% of file test1.bmp was constructed with the cached data. 1514 file chunks need to be downloaded from the server.
+2023/3/26 20:49:07: Send back to Client.

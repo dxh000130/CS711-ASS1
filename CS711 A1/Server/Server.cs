@@ -126,59 +126,123 @@ namespace Server
     {
         var blockHashes = new Dictionary<string, List<Tuple<int, int, int, string>>>();
 
-        using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        try
         {
-            byte[] buffer = new byte[blockSize];
-            int bytesRead;
-            int blockIndex = 0;
-            int startByte = 0;
-            int count = 0;
-            bytesRead = fileStream.Read(buffer, 0, blockSize);
-            while (bytesRead == blockSize)
+            int s = 0, e;
+            int index = 0;
+            byte[] content = File.ReadAllBytes(filePath);
+            while ((e = Rabin_Karp(content, s)) <= content.Length)
             {
-                count += 1;
-
-                // Compute the hash for the current block
-                string hash = ComputeHash(buffer);
-
-                int endByte = startByte + bytesRead - 1;
-
+                byte[] data = new byte[e-s];
+                Array.Copy(content, s, data, 0, e - s);
+                string hash = ComputeHash(data);
                 if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
                 {
                     blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
                 }
 
                 // Add the block information to the list associated with the file name
-                blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
-                startByte = endByte + 1;
-                blockIndex++;
-                Log_Detail($"一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
-
-                bytesRead = fileStream.Read(buffer, 0, blockSize);
-            }
-
-            // Process the last block if it exists
-            if (bytesRead > 0)
-            {
-                Array.Resize(ref buffer, bytesRead);
-
-                // Compute the hash for the current block
-                string hash = ComputeHash(buffer);
-                int endByte = startByte + bytesRead - 1;
-
-                if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
+                blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(index, s, e, hash));
+                s = e;
+                index++;
+                if (s == content.Length)
                 {
-                    blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
+                    break;
                 }
-
-                // Add the block information to the list associated with the file name
-                blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
-                Log_Detail($"最后一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
             }
-            Log_Detail(filePath+"循环结束");
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        // using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+        // {
+        //     byte[] buffer = new byte[blockSize];
+        //     int bytesRead;
+        //     int blockIndex = 0;
+        //     int startByte = 0;
+        //     int count = 0;
+        //     bytesRead = fileStream.Read(buffer, 0, blockSize);
+        //     while (bytesRead == blockSize)
+        //     {
+        //         count += 1;
+        //
+        //         // Compute the hash for the current block
+        //         string hash = ComputeHash(buffer);
+        //
+        //         int endByte = startByte + bytesRead - 1;
+        //
+        //         if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
+        //         {
+        //             blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
+        //         }
+        //
+        //         // Add the block information to the list associated with the file name
+        //         blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
+        //         startByte = endByte + 1;
+        //         blockIndex++;
+        //         Log_Detail($"一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+        //
+        //         bytesRead = fileStream.Read(buffer, 0, blockSize);
+        //     }
+        //
+        //     // Process the last block if it exists
+        //     if (bytesRead > 0)
+        //     {
+        //         Array.Resize(ref buffer, bytesRead);
+        //
+        //         // Compute the hash for the current block
+        //         string hash = ComputeHash(buffer);
+        //         int endByte = startByte + bytesRead - 1;
+        //
+        //         if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
+        //         {
+        //             blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
+        //         }
+        //
+        //         // Add the block information to the list associated with the file name
+        //         blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
+        //         Log_Detail($"最后一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
+        //     }
+        //     Log_Detail(filePath+"循环结束");
+        // }
 
         return blockHashes;
+    }
+    private static int Rabin_Karp(byte[] content, int pos)
+    {
+        int windowSize = 3;
+        int modulus = 2048;
+        int sum = 0;
+        int contentLength = content.Length;
+
+        if (pos + windowSize > contentLength)
+        {
+            return contentLength;
+        }
+
+        for (int i = 0; i < windowSize; ++i)
+        {
+            sum = (sum * 10) + content[pos + i];
+        }
+
+        if (sum % modulus == 0)
+        {
+            return pos + windowSize;
+        }
+
+        int highestPlaceValue = (int)Math.Pow(10, windowSize - 1);
+        for (int i = pos + windowSize; i < contentLength; ++i)
+        {
+            sum = (sum - content[i - windowSize] * highestPlaceValue) * 10 + content[i];
+
+            if (sum % modulus == 0)
+            {
+                return i + 1;
+            }
+        }
+
+        return contentLength;
     }
     public static void Log(string message)
     {
