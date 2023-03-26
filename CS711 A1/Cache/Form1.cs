@@ -145,7 +145,7 @@ namespace Cache
                                     }
                                 }
 
-                                if (newForm.listBox1.Items.Count == 0)
+                                if (CachedFile_list.Count == 0)
                                 {
                                     Total_number_of_file_blocks -= Number_of_file_blocks_that_exist;
                                     Number_of_file_blocks_that_exist = 0;

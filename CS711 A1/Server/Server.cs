@@ -126,87 +126,30 @@ namespace Server
     {
         var blockHashes = new Dictionary<string, List<Tuple<int, int, int, string>>>();
 
-        try
+        int Start_Index = 0;
+        int End_Index;
+        int index = 0; //Which File block in this file
+        byte[] content = File.ReadAllBytes(filePath);
+        End_Index = Rabin_Karp(content, Start_Index);
+        while (End_Index <= content.Length)
         {
-            int s = 0, e;
-            int index = 0;
-            byte[] content = File.ReadAllBytes(filePath);
-            while ((e = Rabin_Karp(content, s)) <= content.Length)
+            // Create New Byte Array For store file block
+            byte[] data = new byte[End_Index-Start_Index];
+            Array.Copy(content, Start_Index, data, 0, End_Index - Start_Index);
+            // Calcuate Hash for this block
+            string hash = ComputeHash(data);
+            // Add Some information to list which is will send to Cache
+            if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
             {
-                byte[] data = new byte[e-s];
-                Array.Copy(content, s, data, 0, e - s);
-                string hash = ComputeHash(data);
-                if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
-                {
-                    blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
-                }
-
-                // Add the block information to the list associated with the file name
-                blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(index, s, e, hash));
-                s = e;
-                index++;
-                if (s == content.Length)
-                {
-                    break;
-                }
+                blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
             }
+            blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(index, Start_Index, End_Index, hash));
+            
+            Start_Index = End_Index;
+            index++;
+            if (Start_Index >= content.Length)break;
+            End_Index = Rabin_Karp(content, Start_Index);
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        // using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-        // {
-        //     byte[] buffer = new byte[blockSize];
-        //     int bytesRead;
-        //     int blockIndex = 0;
-        //     int startByte = 0;
-        //     int count = 0;
-        //     bytesRead = fileStream.Read(buffer, 0, blockSize);
-        //     while (bytesRead == blockSize)
-        //     {
-        //         count += 1;
-        //
-        //         // Compute the hash for the current block
-        //         string hash = ComputeHash(buffer);
-        //
-        //         int endByte = startByte + bytesRead - 1;
-        //
-        //         if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
-        //         {
-        //             blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
-        //         }
-        //
-        //         // Add the block information to the list associated with the file name
-        //         blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
-        //         startByte = endByte + 1;
-        //         blockIndex++;
-        //         Log_Detail($"一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
-        //
-        //         bytesRead = fileStream.Read(buffer, 0, blockSize);
-        //     }
-        //
-        //     // Process the last block if it exists
-        //     if (bytesRead > 0)
-        //     {
-        //         Array.Resize(ref buffer, bytesRead);
-        //
-        //         // Compute the hash for the current block
-        //         string hash = ComputeHash(buffer);
-        //         int endByte = startByte + bytesRead - 1;
-        //
-        //         if (!blockHashes.ContainsKey(Path.GetFileName(filePath)))
-        //         {
-        //             blockHashes[Path.GetFileName(filePath)] = new List<Tuple<int, int, int, string>>();
-        //         }
-        //
-        //         // Add the block information to the list associated with the file name
-        //         blockHashes[Path.GetFileName(filePath)].Add(Tuple.Create(blockIndex, startByte, endByte, hash));
-        //         Log_Detail($"最后一次循环结束 Iteration {count}: bytesRead={bytesRead}, startByte={startByte}");
-        //     }
-        //     Log_Detail(filePath+"循环结束");
-        // }
-
         return blockHashes;
     }
     private static int Rabin_Karp(byte[] content, int pos)
