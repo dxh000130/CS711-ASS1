@@ -34,11 +34,11 @@ namespace Cache
             _cache = new Dictionary<string, string>();
             Server_IP_label.Text = SERVER_HOST + ":" + SERVER_PORT;
             Client_IP_label.Text = CACHE_SERVER_HOST + ":" + CACHE_SERVER_PORT;
+            // Check if the log file exists and delete it
             if (!Directory.Exists("./Log"))
             {
                 Directory.CreateDirectory("./Log");
             }
-            // Check if the log file exists and delete it
             if (File.Exists("./Log/Cache_log.txt"))
             {
                 File.Delete("./Log/Cache_log.txt");

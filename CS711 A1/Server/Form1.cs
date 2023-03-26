@@ -47,13 +47,13 @@ namespace Server
         }
         private void LoadFileList()
         {
-            // 指定目录
+            // directory
             string directoryPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "File_Storage"));
-            // 获取目录中的所有文件
+            // Get Files
             string[] files = Directory.GetFiles(directoryPath);
-            // 清空列表
+            // Clear list FOR GUI
             FilesListbox.Items.Clear();
-            // 添加所有文件
+            // Add Files
             foreach (string file in files)
             {
                 FilesListbox.Items.Add(Path.GetFileName(file));
